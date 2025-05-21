@@ -1,5 +1,6 @@
 import { addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove, collection } from "firebase/firestore";
 import { db } from "../index.js";
+import axios from 'axios'; 
 
 async function crearEquipo(id, nombre, capitan, jugadores) { 
     try {
