@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Perfil - Torneos de Fútbol</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/jugador.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="logo">FootPlayer</div>
+      <ul>
+        <li class="active"><i class="fas fa-home"></i> <a href="dashboard_jugador.html">Inicio</a></li>
+        <li class="active"><i class="fas fa-user"></i> <a href="perfil.html">Mi Perfil</a></li>
+        <li><i class="fas fa-users"></i> <a href="equipo.html">Mi Equipo</a></li>
+        <li><i class="fas fa-trophy"></i> <a href="torneos.html">Torneos</a></li>
+        <li><i class="fas fa-chart-bar"></i> <a href="estadisticas.html">Estadísticas</a></li>
+        <li><i class="fas fa-cog"></i> <a href="#">Configuración</a></li>
+        <li><i class="fas fa-sign-out-alt"></i> <a href="../login.html">Cerrar Sesión</a></li>
+      </ul>
+      <div class="footer">© 2025 FootPlayer</div>
+    </nav>
+    
+    <div class="main">
+      <header class="main-header">
+        <h1>Mi Perfil</h1>
+        <div class="user-menu">
+          <img src="https://via.placeholder.com/40" alt="Foto de perfil" id="player-avatar">
+          <div class="notifications">
+            <i class="fas fa-bell"></i>
+            <span class="badge">2</span>
+          </div>
+        </div>
+      </header>
+      
+      <section class="content">
+        <div class="card">
+          <div class="profile-header">
+            <div class="profile-avatar">
+              <img src="https://via.placeholder.com/150" alt="Foto de perfil">
+              <button class="btn btn-secondary" id="change-avatar">Cambiar foto</button>
+            </div>
+            <div class="profile-info">
+              <h2 id="profile-name">Juan Pérez</h2>
+              <p class="profile-position"><i class="fas fa-tshirt"></i> Delantero</p>
+              <p class="profile-team"><i class="fas fa-users"></i> Los Tigres</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <h2><i class="fas fa-user-edit"></i> Editar Perfil</h2>
+          <form id="profile-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="first-name">Nombre</label>
+                <input type="text" id="first-name" class="form-control" value="Juan">
+              </div>
+              <div class="form-group">
+                <label for="last-name">Apellido</label>
+                <input type="text" id="last-name" class="form-control" value="Pérez">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" class="form-control" value="juan.perez@example.com">
+            </div>
+            
+            <div class="form-group">
+              <label for="phone">Teléfono</label>
+              <input type="tel" id="phone" class="form-control" value="+57 1234567890">
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="position">Posición</label>
+                <select id="position" class="form-control">
+                  <option value="portero">Portero</option>
+                  <option value="defensa">Defensa</option>
+                  <option value="medio">Mediocampista</option>
+                  <option value="delantero" selected>Delantero</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="birthdate">Fecha de nacimiento</label>
+                <input type="date" id="birthdate" class="form-control" value="1990-05-15">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="bio">Biografía</label>
+              <textarea id="bio" class="form-control" rows="3">Jugador de fútbol con 10 años de experiencia en torneos locales.</textarea>
+            </div>
+            
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" id="cancel-edit">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            </div>
+          </form>
+        </div>
+        
+        <div class="card">
+          <h2><i class="fas fa-shield-alt"></i> Información Médica</h2>
+          <form id="medical-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="blood-type">Tipo de sangre</label>
+                <select id="blood-type" class="form-control">
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="eps">EPS</label>
+                <input type="text" id="eps" class="form-control" value="Sanitas">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="emergency-contact">Contacto de emergencia</label>
+              <input type="text" id="emergency-contact" class="form-control" value="María Pérez - +57 987654321">
+            </div>
+            
+            <div class="form-group">
+              <label for="allergies">Alergias</label>
+              <textarea id="allergies" class="form-control" rows="2">Ninguna conocida</textarea>
+            </div>
+            
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
+  </div>
+  
+  <script src="../js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Configurar formulario
+      const profileForm = document.getElementById('profile-form');
+      if (profileForm) {
+        profileForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          alert('Perfil actualizado exitosamente');
+        });
+      }
+      
+      // Configurar botón cancelar
+      const cancelEditBtn = document.getElementById('cancel-edit');
+      if (cancelEditBtn) {
+        cancelEditBtn.addEventListener('click', function() {
+          if (confirm('¿Deseas descartar los cambios?')) {
+            // Resetear formulario
+            profileForm.reset();
+          }
+        });
+      }
+      
+      // Configurar cambio de avatar
+      const changeAvatarBtn = document.getElementById('change-avatar');
+      if (changeAvatarBtn) {
+        changeAvatarBtn.addEventListener('click', function() {
+          alert('Funcionalidad para cambiar foto de perfil');
+        });
+      }
+    });
+  </script>
+</body>
+</html>
