@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jugadores - Admin</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="logo">FootAdmin</div>
+      <ul>
+        <li><i class="fas fa-home"></i> <a href="dashboard_admin.html">Inicio</a></li>
+        <li class="active"><i class="fas fa-trophy"></i> <a href="torneos.html">Torneos</a></li>
+        <li><i class="fas fa-users"></i> <a href="equipos.html">Equipos</a></li>
+        <li><i class="fas fa-user"></i> <a href="jugadores.html">Jugadores</a></li>
+        <li><i class="fas fa-calendar-alt"></i> <a href="partidos.html">Partidos</a></li>
+        <li><i class="fas fa-cog"></i> <a href="#">Configuración</a></li>
+      </ul>
+      <div class="footer">© 2025 FootAdmin</div>
+    </nav>
+      <header class="main-header">
+        <h1>Gestión de Jugadores</h1>
+        <div class="header-actions">
+          <input type="text" placeholder="Buscar jugador..." class="form-control">
+          <button class="btn btn-primary">Exportar</button>
+        </div>
+      </header>
+      
+      <section class="content">
+        <div class="card">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Foto</th>
+                <th>Nombre</th>
+                <th>Equipo</th>
+                <th>Posición</th>
+                <th>Goles</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Ejemplo de datos -->
+              <tr>
+                <td><img src="https://via.placeholder.com/40" class="player-avatar"></td>
+                <td>Juan Pérez</td>
+                <td>Los Tigres</td>
+                <td>Delantero</td>
+                <td>8</td>
+                <td>
+                  <button class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
+                  <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+</html>

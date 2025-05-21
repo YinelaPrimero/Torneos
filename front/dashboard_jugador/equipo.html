@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Equipo - FootPlayer</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/jugador.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="logo">FootPlayer</div>
+      <ul>
+        <li class="active"><i class="fas fa-home"></i> <a href="dashboard_jugador.html">Inicio</a></li>
+        <li><i class="fas fa-user"></i> <a href="perfil.html">Mi Perfil</a></li>
+        <li><i class="fas fa-users"></i> <a href="equipo.html">Mi Equipo</a></li>
+        <li><i class="fas fa-trophy"></i> <a href="torneos.html">Torneos</a></li>
+        <li><i class="fas fa-chart-bar"></i> <a href="estadisticas.html">Estadísticas</a></li>
+        <li><i class="fas fa-cog"></i> <a href="#">Configuración</a></li>
+        <li><i class="fas fa-sign-out-alt"></i> <a href="../login.html">Cerrar Sesión</a></li>
+      </ul>
+      <div class="footer">© 2025 FootPlayer</div>
+    </nav>
+    
+    <div class="main">
+      <header class="main-header">
+        <h1>Mi Equipo</h1>
+      </header>
+      
+      <section class="content">
+        <div class="card team-profile">
+          <div class="team-header">
+            <img src="https://via.placeholder.com/150" alt="Logo del equipo" class="team-logo">
+            <div class="team-info">
+              <h2>Los Tigres</h2>
+              <p><strong>Capitán:</strong> Juan Pérez</p>
+              <p><strong>Torneo actual:</strong> Torneo de Verano 2025</p>
+              <div class="team-stats">
+                <span>Partidos: <strong>12</strong></span>
+                <span>Victorias: <strong>8</strong></span>
+                <span>Goles: <strong>24</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2><i class="fas fa-users"></i> Jugadores</h2>
+          <div class="players-grid" id="team-players">
+            <!-- Jugadores cargados con JS -->
+          </div>
+        </div>
+
+        <div class="card">
+          <h2><i class="fas fa-calendar-alt"></i> Próximos Partidos</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Rival</th>
+                <th>Torneo</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>20/06/2025 18:00</td>
+                <td>Águilas FC</td>
+                <td>Torneo de Verano</td>
+                <td><button class="btn btn-secondary btn-sm">Detalles</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // Datos de ejemplo
+    const teamPlayers = [
+      { id: 1, name: "Juan Pérez", position: "Delantero", goals: 8, avatar: "https://via.placeholder.com/80" },
+      { id: 2, name: "Carlos Gómez", position: "Mediocampista", goals: 3, avatar: "https://via.placeholder.com/80" }
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const playersGrid = document.getElementById('team-players');
+      
+      playersGrid.innerHTML = teamPlayers.map(player => `
+        <div class="player-card">
+          <img src="${player.avatar}" alt="${player.name}" class="player-avatar">
+          <h3>${player.name}</h3>
+          <p>${player.position}</p>
+          <p><strong>Goles:</strong> ${player.goals}</p>
+          <button class="btn btn-secondary btn-sm">Ver perfil</button>
+        </div>
+      `).join('');
+    });
+  </script>
+</body>
+</html>

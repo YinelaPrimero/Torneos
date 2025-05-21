@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis Estadísticas - FootPlayer</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/jugador.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Chart.js para gráficos -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="logo">FootPlayer</div>
+      <ul>
+        <li class="active"><i class="fas fa-home"></i> <a href="dashboard_jugador.html">Inicio</a></li>
+        <li><i class="fas fa-user"></i> <a href="perfil.html">Mi Perfil</a></li>
+        <li><i class="fas fa-users"></i> <a href="equipo.html">Mi Equipo</a></li>
+        <li><i class="fas fa-trophy"></i> <a href="torneos.html">Torneos</a></li>
+        <li><i class="fas fa-chart-bar"></i> <a href="estadisticas.html">Estadísticas</a></li>
+        <li><i class="fas fa-cog"></i> <a href="#">Configuración</a></li>
+        <li><i class="fas fa-sign-out-alt"></i> <a href="../login.html">Cerrar Sesión</a></li>
+      </ul>
+      <div class="footer">© 2025 FootPlayer</div>
+    </nav>
+    
+    
+    <div class="main">
+      <header class="main-header">
+        <h1>Mis Estadísticas</h1>
+      </header>
+      
+      <section class="content">
+        <div class="stats-summary">
+          <div class="stat-card">
+            <h3>Goles totales</h3>
+            <p class="stat-value">15</p>
+          </div>
+          <div class="stat-card">
+            <h3>Asistencias</h3>
+            <p class="stat-value">7</p>
+          </div>
+          <div class="stat-card">
+            <h3>Partidos jugados</h3>
+            <p class="stat-value">24</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2><i class="fas fa-chart-bar"></i> Rendimiento por torneo</h2>
+          <canvas id="tournamentStatsChart" height="300"></canvas>
+        </div>
+
+        <div class="card">
+          <h2><i class="fas fa-history"></i> Historial de Partidos</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Torneo</th>
+                <th>Resultado</th>
+                <th>Goles</th>
+                <th>Asistencias</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>15/06/2025</td>
+                <td>Torneo de Verano</td>
+                <td>Victoria 3-1</td>
+                <td>2</td>
+                <td>1</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Gráfico de rendimiento
+      const ctx = document.getElementById('tournamentStatsChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Torneo Verano', 'Copa Primavera', 'Torneo Invierno'],
+          datasets: [{
+            label: 'Goles',
+            data: [8, 5, 2],
+            backgroundColor: '#008f39'
+          }, {
+            label: 'Asistencias',
+            data: [3, 2, 2],
+            backgroundColor: '#1f2937'
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

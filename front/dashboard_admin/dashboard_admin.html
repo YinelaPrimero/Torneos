@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Administración - Torneos de Fútbol</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="logo">FootAdmin</div>
+      <ul>
+        <li class="active"><i class="fas fa-home"></i> <a href="index.html">Inicio</a></li>
+        <li><i class="fas fa-trophy"></i> <a href="torneos.html">Torneos</a></li>
+        <li><i class="fas fa-users"></i> <a href="equipos.html">Equipos</a></li>
+        <li><i class="fas fa-user"></i> <a href="jugadores.html">Jugadores</a></li>
+        <li><i class="fas fa-calendar-alt"></i> <a href="partidos.html">Partidos</a></li>
+        <li><i class="fas fa-cog"></i> <a href="#">Configuración</a></li>
+      </ul>
+      <div class="footer">© 2025 FootAdmin</div>
+    </nav>
+    
+    <div class="main">
+      <header class="main-header">
+        <h1>Panel de Administración</h1>
+        <div class="user-menu">
+          <span>Admin</span>
+          <img src="https://via.placeholder.com/40" alt="Foto de perfil">
+          <button class="btn btn-secondary" id="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+      </header>
+      
+      <section class="content">
+        <div class="alert alert-success">
+          Bienvenido al panel de administración. Aquí puedes gestionar todos los aspectos del sistema.
+        </div>
+        
+        <div class="dashboard-stats">
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+            <div class="stat-info">
+              <h3>Torneos Activos</h3>
+              <p id="active-tournaments">5</p>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-users"></i></div>
+            <div class="stat-info">
+              <h3>Equipos Registrados</h3>
+              <p id="teams-count">24</p>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-user"></i></div>
+            <div class="stat-info">
+              <h3>Jugadores</h3>
+              <p id="players-count">120</p>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+            <div class="stat-info">
+              <h3>Partidos Hoy</h3>
+              <p id="matches-today">3</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-header">
+            <h2>Próximos Partidos</h2>
+            <button class="btn btn-primary" id="add-match-btn">Agregar Partido</button>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Torneo</th>
+                <th>Local</th>
+                <th>Visitante</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="upcoming-matches">
+              <!-- JS will populate this -->
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="card">
+          <h2>Últimos Torneos Creados</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
+                <th>Equipos</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="recent-tournaments">
+              <!-- JS will populate this -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+  
+  <!-- Modal Crear Torneo -->
+  <div class="modal" id="tournament-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Crear Nuevo Torneo</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="tournament-form">
+          <div class="form-group">
+            <label for="t-name">Nombre del torneo</label>
+            <input type="text" id="t-name" class="form-control" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="t-description">Descripción</label>
+            <textarea id="t-description" class="form-control" rows="3"></textarea>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="t-start">Fecha de inicio</label>
+              <input type="date" id="t-start" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="t-end">Fecha de fin</label>
+              <input type="date" id="t-end" class="form-control" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="t-teams">Número de equipos</label>
+            <select id="t-teams" class="form-control" required>
+              <option value="4">4</option>
+              <option value="8">8</option>
+              <option value="16" selected>16</option>
+              <option value="32">32</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="t-type">Tipo de torneo</label>
+            <select id="t-type" class="form-control" required>
+              <option value="liga">Liga</option>
+              <option value="eliminacion">Eliminación directa</option>
+              <option value="grupos">Grupos + Eliminación</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="t-min-age">Edad mínima</label>
+            <input type="number" id="t-min-age" class="form-control" min="10" max="60" value="18">
+          </div>
+          
+          <div class="form-group">
+            <label>Género permitido</label>
+            <div class="radio-group">
+              <label><input type="radio" name="t-gender" value="masculino" checked> Masculino</label>
+              <label><input type="radio" name="t-gender" value="femenino"> Femenino</label>
+              <label><input type="radio" name="t-gender" value="mixto"> Mixto</label>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancel-tournament">Cancelar</button>
+        <button class="btn btn-primary" id="save-tournament">Guardar Torneo</button>
+      </div>
+    </div>
+  </div>
+  
+  <script src="../js/auth.js"></script>
+  <script src="../js/admin.js"></script>
+</body>
+</html>
