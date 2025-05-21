@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard del Jugador - Torneos de Fútbol</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/jugador.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="logo">FootPlayer</div>
+      <ul>
+        <li class="active"><i class="fas fa-home"></i> <a href="dashboard_jugador.html">Inicio</a></li>
+        <li><i class="fas fa-user"></i> <a href="perfil.html">Mi Perfil</a></li>
+        <li><i class="fas fa-users"></i> <a href="equipo.html">Mi Equipo</a></li>
+        <li><i class="fas fa-trophy"></i> <a href="torneos.html">Torneos</a></li>
+        <li><i class="fas fa-chart-bar"></i> <a href="estadisticas.html">Estadísticas</a></li>
+        <li><i class="fas fa-cog"></i> <a href="#">Configuración</a></li>
+        <li><i class="fas fa-sign-out-alt"></i> <a href="../login.html">Cerrar Sesión</a></li>
+      </ul>
+      <div class="footer">© 2025 FootPlayer</div>
+    </nav>
+    
+    <div class="main">
+      <header class="main-header">
+        <h1>Bienvenido, <span id="player-name">Juan Pérez</span></h1>
+        <div class="user-menu">
+          <img src="https://via.placeholder.com/40" alt="Foto de perfil" id="player-avatar">
+          <div class="notifications">
+            <i class="fas fa-bell"></i>
+            <span class="badge">2</span>
+          </div>
+        </div>
+      </header>
+      
+      <section class="content">
+        <div class="player-stats">
+          <div class="player-card">
+            <div class="player-avatar">
+              <img src="https://via.placeholder.com/100" alt="Foto de perfil">
+            </div>
+            <div class="player-info">
+              <h2 id="full-name">Juan Pérez</h2>
+              <p class="position"><i class="fas fa-tshirt"></i> <span id="player-position">Delantero</span></p>
+              <p class="team"><i class="fas fa-users"></i> <span id="player-team">Los Tigres</span></p>
+            </div>
+            <div class="player-numbers">
+              <div class="stat">
+                <h3>Goles</h3>
+                <p id="goals-count">8</p>
+              </div>
+              <div class="stat">
+                <h3>Partidos</h3>
+                <p id="matches-count">12</p>
+              </div>
+              <div class="stat">
+                <h3>Rating</h3>
+                <p id="player-rating">8.2</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="dashboard-cards">
+          <div class="card upcoming-matches">
+            <h2><i class="fas fa-calendar-alt"></i> Próximos Partidos</h2>
+            <div class="matches-list" id="upcoming-matches-list">
+              <!-- JS will populate this -->
+            </div>
+          </div>
+          
+          <div class="card quick-actions">
+            <h2><i class="fas fa-bolt"></i> Acciones Rápidas</h2>
+            <div class="actions-grid">
+              <button class="action-btn" id="join-team-btn">
+                <i class="fas fa-user-plus"></i>
+                <span>Unirse a Equipo</span>
+              </button>
+              <button class="action-btn" id="join-tournament-btn">
+                <i class="fas fa-trophy"></i>
+                <span>Inscribirse en Torneo</span>
+              </button>
+              <button class="action-btn" id="view-stats-btn">
+                <i class="fas fa-chart-line"></i>
+                <span>Ver Estadísticas</span>
+              </button>
+              <button class="action-btn" id="edit-profile-btn">
+                <i class="fas fa-user-edit"></i>
+                <span>Editar Perfil</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <h2><i class="fas fa-trophy"></i> Torneos Activos</h2>
+          <div class="tournaments-grid" id="active-tournaments">
+            <!-- JS will populate this -->
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  
+  <!-- Modal Unirse a Equipo -->
+  <div class="modal" id="join-team-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Unirse a un Equipo</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="team-search">Buscar Equipo</label>
+          <input type="text" id="team-search" class="form-control" placeholder="Nombre del equipo...">
+        </div>
+        
+        <div class="teams-list" id="available-teams">
+          <!-- JS will populate this -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancel-join-team">Cancelar</button>
+      </div>
+    </div>
+  </div>
+  
+  <script src="../js/auth.js"></script>
+  <script src="../js/jugador.js"></script>
+</body>
+</html>

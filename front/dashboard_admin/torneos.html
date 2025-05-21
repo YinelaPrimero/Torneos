@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Torneos - Admin</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="logo">FootAdmin</div>
+      <ul>
+        <li><i class="fas fa-home"></i> <a href="dashboard_admin.html">Inicio</a></li>
+        <li class="active"><i class="fas fa-trophy"></i> <a href="torneos.html">Torneos</a></li>
+        <li><i class="fas fa-users"></i> <a href="equipos.html">Equipos</a></li>
+        <li><i class="fas fa-user"></i> <a href="jugadores.html">Jugadores</a></li>
+        <li><i class="fas fa-calendar-alt"></i> <a href="partidos.html">Partidos</a></li>
+        <li><i class="fas fa-cog"></i> <a href="#">Configuración</a></li>
+      </ul>
+      <div class="footer">© 2025 FootAdmin</div>
+    </nav>
+    
+    <div class="main">
+      <header class="main-header">
+        <h1>Gestión de Torneos</h1>
+        <div class="user-menu">
+          <span>Admin</span>
+          <img src="https://via.placeholder.com/40" alt="Foto de perfil">
+          <button class="btn btn-secondary" id="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+      </header>
+      
+      <section class="content">
+        <div class="card">
+          <div class="card-header">
+            <h2>Lista de Torneos</h2>
+            <div class="header-actions">
+              <button class="btn btn-primary" id="create-tournament-btn">
+                <i class="fas fa-plus"></i> Crear Torneo
+              </button>
+              <div class="search-box">
+                <input type="text" placeholder="Buscar torneo...">
+                <button class="btn btn-secondary"><i class="fas fa-search"></i></button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Fecha Inicio</th>
+                  <th>Fecha Fin</th>
+                  <th>Equipos</th>
+                  <th>Tipo</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tournaments-table">
+                <!-- JS will populate this -->
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="table-footer">
+            <div class="pagination-info">
+              Mostrando 1-5 de 15 torneos
+            </div>
+            <div class="pagination-controls">
+              <button class="btn btn-secondary" disabled><i class="fas fa-chevron-left"></i></button>
+              <button class="btn btn-secondary active">1</button>
+              <button class="btn btn-secondary">2</button>
+              <button class="btn btn-secondary">3</button>
+              <button class="btn btn-secondary"><i class="fas fa-chevron-right"></i></button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  
+  <!-- Modal Crear/Editar Torneo -->
+  <div class="modal" id="tournament-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title">Crear Nuevo Torneo</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="tournament-form">
+          <div class="form-group">
+            <label for="t-name">Nombre del torneo</label>
+            <input type="text" id="t-name" class="form-control" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="t-description">Descripción</label>
+            <textarea id="t-description" class="form-control" rows="3"></textarea>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="t-start">Fecha de inicio</label>
+              <input type="date" id="t-start" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="t-end">Fecha de fin</label>
+              <input type="date" id="t-end" class="form-control" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="t-teams">Número de equipos</label>
+            <select id="t-teams" class="form-control" required>
+              <option value="4">4</option>
+              <option value="8">8</option>
+              <option value="16" selected>16</option>
+              <option value="32">32</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="t-type">Tipo de torneo</label>
+            <select id="t-type" class="form-control" required>
+              <option value="liga">Liga</option>
+              <option value="eliminacion">Eliminación directa</option>
+              <option value="grupos">Grupos + Eliminación</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="t-min-age">Edad mínima</label>
+            <input type="number" id="t-min-age" class="form-control" min="10" max="60" value="18">
+          </div>
+          
+          <div class="form-group">
+            <label>Género permitido</label>
+            <div class="radio-group">
+              <label><input type="radio" name="t-gender" value="masculino" checked> Masculino</label>
+              <label><input type="radio" name="t-gender" value="femenino"> Femenino</label>
+              <label><input type="radio" name="t-gender" value="mixto"> Mixto</label>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="t-rules">Reglas especiales</label>
+            <textarea id="t-rules" class="form-control" rows="3"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancel-tournament">Cancelar</button>
+        <button class="btn btn-primary" id="save-tournament">Guardar Torneo</button>
+      </div>
+    </div>
+  </div>
+  
+  <script src="../js/auth.js"></script>
+  <script src="../js/admin.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Datos de ejemplo
+      const tournaments = [
+        {
+          id: 1,
+          name: 'Torneo de Verano 2025',
+          startDate: '2025-06-15',
+          endDate: '2025-08-20',
+          teams: 16,
+          type: 'Grupos + Eliminación',
+          status: 'Activo'
+        },
+        {
+          id: 2,
+          name: 'Copa Primavera',
+          startDate: '2025-03-01',
+          endDate: '2025-05-30',
+          teams: 8,
+          type: 'Eliminación directa',
+          status: 'Finalizado'
+        },
+        {
+          id: 3,
+          name: 'Torneo Invierno',
+          startDate: '2025-12-01',
+          endDate: '2026-02-28',
+          teams: 12,
+          type: 'Liga',
+          status: 'Planificado'
+        }
+      ];
+      
+      // Llenar tabla de torneos
+      const tournamentsTable = document.getElementById('tournaments-table');
+      if (tournamentsTable) {
+        tournamentsTable.innerHTML = tournaments.map(tournament => `
+          <tr>
+            <td>${tournament.name}</td>
+            <td>${tournament.startDate}</td>
+            <td>${tournament.endDate}</td>
+            <td>${tournament.teams}</td>
+            <td>${tournament.type}</td>
+            <td>
+              <span class="badge ${
+                tournament.status === 'Activo' ? 'badge-success' : 
+                tournament.status === 'Finalizado' ? 'badge-secondary' : 'badge-info'
+              }">${tournament.status}</span>
+            </td>
+            <td class="table-actions">
+              <button class="btn btn-secondary btn-sm edit-tournament" data-id="${tournament.id}">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-danger btn-sm delete-tournament" data-id="${tournament.id}">
+                <i class="fas fa-trash"></i>
+              </button>
+              <button class="btn btn-primary btn-sm view-tournament" data-id="${tournament.id}">
+                <i class="fas fa-eye"></i>
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      }
+      
+      // Configurar botones de edición
+      document.querySelectorAll('.edit-tournament').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const tournamentId = this.getAttribute('data-id');
+          const tournament = tournaments.find(t => t.id == tournamentId);
+          
+          if (tournament) {
+            document.getElementById('modal-title').textContent = 'Editar Torneo';
+            document.getElementById('t-name').value = tournament.name;
+            document.getElementById('t-start').value = tournament.startDate;
+            document.getElementById('t-end').value = tournament.endDate;
+            document.getElementById('t-teams').value = tournament.teams;
+            document.getElementById('t-type').value = tournament.type.toLowerCase();
+            
+            const modal = document.getElementById('tournament-modal');
+            modal.classList.add('open');
+          }
+        });
+      });
+      
+      // Configurar botón crear torneo
+      const createTournamentBtn = document.getElementById('create-tournament-btn');
+      if (createTournamentBtn) {
+        createTournamentBtn.addEventListener('click', function() {
+          document.getElementById('modal-title').textContent = 'Crear Nuevo Torneo';
+          document.getElementById('tournament-form').reset();
+          
+          const modal = document.getElementById('tournament-modal');
+          modal.classList.add('open');
+        });
+      }
+    });
+  </script>
+</body>
+</html>

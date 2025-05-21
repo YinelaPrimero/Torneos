@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Equipos - Admin</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="logo">FootAdmin</div>
+      <ul>
+        <li><i class="fas fa-home"></i> <a href="dashboard_admin.html">Inicio</a></li>
+        <li class="active"><i class="fas fa-trophy"></i> <a href="torneos.html">Torneos</a></li>
+        <li><i class="fas fa-users"></i> <a href="equipos.html">Equipos</a></li>
+        <li><i class="fas fa-user"></i> <a href="jugadores.html">Jugadores</a></li>
+        <li><i class="fas fa-calendar-alt"></i> <a href="partidos.html">Partidos</a></li>
+        <li><i class="fas fa-cog"></i> <a href="#">Configuración</a></li>
+      </ul>
+      <div class="footer">© 2025 FootAdmin</div>
+    </nav>
+    
+    <div class="main">
+      <header class="main-header">
+        <h1>Gestión de Equipos</h1>
+        <button class="btn btn-primary" id="create-team-btn">
+          <i class="fas fa-plus"></i> Crear Equipo
+        </button>
+      </header>
+      
+      <section class="content">
+        <div class="card">
+          <div class="teams-grid">
+            <!-- Ejemplo de equipo -->
+            <div class="team-card">
+              <div class="team-header">
+                <img src="https://via.placeholder.com/80" class="team-logo">
+                <h3>Los Tigres</h3>
+              </div>
+              <div class="team-info">
+                <p><strong>Capitán:</strong> Juan Pérez</p>
+                <p><strong>Jugadores:</strong> 12/16</p>
+                <p><strong>Torneo:</strong> Verano 2025</p>
+              </div>
+              <div class="team-actions">
+                <button class="btn btn-secondary btn-sm">Editar</button>
+                <button class="btn btn-danger btn-sm">Eliminar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Modal para crear equipo -->
+  <div class="modal" id="team-modal">
+    <div class="modal-content">
+      <h3>Crear Equipo</h3>
+      <form id="team-form">
+        <div class="form-group">
+          <label>Nombre del equipo</label>
+          <input type="text" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Capitán</label>
+          <select class="form-control" required>
+            <option value="">Seleccionar jugador</option>
+            <option value="1">Juan Pérez</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Torneo</label>
+          <select class="form-control">
+            <option value="">Sin torneo</option>
+            <option value="1">Torneo de Verano</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" id="cancel-team">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
