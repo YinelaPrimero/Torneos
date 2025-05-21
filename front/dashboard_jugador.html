@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard del Jugador - Torneos de Fútbol</title>
+  <style>
+    /* Reset y estilos base */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f5f7fa; color: #333; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    button { cursor: pointer; border: none; }
+
+    /* Layout principal */
+    .container { display: flex; height: 100vh; }
+    nav.sidebar { width: 240px; background: #1f2937; color: #fff; display: flex; flex-direction: column; }
+    nav.sidebar .logo { font-size: 1.5rem; font-weight: bold; text-align: center; padding: 1rem 0; border-bottom: 1px solid #374151; }
+    nav.sidebar ul { flex: 1; padding: 1rem; }
+    nav.sidebar ul li { margin-bottom: 1rem; display: flex; align-items: center; }
+    nav.sidebar ul li:hover { background: #374151; border-radius: 6px; }
+    nav.sidebar ul li i { margin-right: 0.75rem; }
+
+    /* Contenido Secundario */
+    .main { flex: 1; display: flex; flex-direction: column; }
+    .main-header { background: #1f2937; color: #fff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+    .main-header h1 { font-size: 1.25rem; }
+
+    /* Bienvenida */
+    .welcome { padding: 1.5rem; background: #fff; margin: 1.5rem; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .welcome h2 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+
+    /* Dashboard */
+    .content { padding: 1.5rem; overflow-y: auto; }
+    .dashboard { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+    .card { background: #fff; padding: 1rem; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .card h2 { font-size: 1.125rem; margin-bottom: 0.5rem; }
+    .card p { font-size: 0.9rem; color: #555; }
+
+    /* Próximos Partidos */
+    .upcoming-matches { margin-top: 1.5rem; }
+    .upcoming-matches h2 { font-size: 1.25rem; margin-bottom: 0.75rem; }
+    .match-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .match-item { background: #fff; padding: 0.75rem; border-radius: 0.5rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+    .teams { display: flex; align-items: center; gap: 0.5rem; }
+    .teams img { width: 24px; height: 24px; }
+    .match-item button { background: #10b981; color: #fff; padding: 0.4rem 0.75rem; border-radius: 4px; }
+
+    /* Media Queries para Responsividad */
+    @media (max-width: 768px) {
+      .container { flex-direction: column; }
+      nav.sidebar { width: 100%; height: auto; }
+      .main { flex: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="logo">FootPlayer</div>
+      <ul>
+        <li><i class="icon">🏠</i> <a href="#">Inicio</a></li>
+        <li><i class="icon">👤</i> <a href="#">Perfil</a></li>
+        <li><i class="icon">👥</i> <a href="#">Mi Equipo</a></li>
+        <li><i class="icon">🏆</i> <a href="#">Torneos</a></li>
+        <li><i class="icon">📊</i> <a href="#">Estadísticas</a></li>
+        <li><i class="icon">⚙️</i> <a href="#">Configuración</a></li>
+        <li><i class="icon">🚪</i> <a href="#">Cerrar Sesión</a></li>
+      </ul>
+      <div style="padding:1rem;">© 2025 FootPlayer</div>
+    </nav>
+    <div class="main">
+      <header class="main-header">
+        <h1>Dashboard del Jugador</h1>
+      </header>
+      <section class="welcome">
+        <h2>Bienvenido, [Nombre del Jugador]</h2>
+        <p>Aquí puedes ver tus próximos partidos, estadísticas y más.</p>
+      </section>
+      <section class="content">
+        <div class="dashboard">
+          <div class="card">
+            <h2>Próximos Partidos</h2>
+            <p id="upcoming-matches-count">3</p>
+          </div>
+          <div class="card">
+            <h2>Estadísticas Personales</h2>
+            <p id="personal-stats">Goles: 5 | Asistencias: 2</p>
+          </div>
+          <div class="card">
+            <h2>Notificaciones</h2>
+            <p id="notifications">Tienes 2 nuevas notificaciones</p>
+          </div>
+        </div>
+
+        <section class="upcoming-matches">
+          <h2>Próximos Partidos</h2>
+          <div class="match-list" id="match-list">
+            <!-- JS inyecta items -->
+          </div>
+        </section>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // Datos de ejemplo: próximos partidos
+    const upcomingMatches = [
+      { home: 'Tigers VI', away: 'NJ Super', time: '18:00' },
+      { home: 'Roger II', away: 'Eagles NY', time: '19:30' },
+    ];
+
+    function renderUpcomingMatches() {
+      const list = document.getElementById('match-list');
+      list.innerHTML = upcomingMatches.map(m => 
+        `<div class="match-item">
+          <div class="teams">
+            <span>${m.home}</span> <strong>vs</strong> <span>${m.away}</span>
+          </div>
+          <span>${m.time}</span>
+          <button>Detalles</button>
+        </div>`
+      ).join('');
+    }
+
+    // Inicializar
+    renderUpcomingMatches();
+  </script>
+</body>
+</html>
