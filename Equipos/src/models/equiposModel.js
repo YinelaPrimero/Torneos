@@ -1,19 +1,22 @@
 import { addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove, collection } from "firebase/firestore";
 import { db } from "../index.js";
+import axios from 'axios'; 
 
-async function crearEquipo(id, nombre, capitan, jugadores) { 
-    try {
-        const docRef = await addDoc(collection(db, "equipos"), {
-            id: id,
-            nombre: nombre,
-            capitan: capitan,           
-            jugadores: jugadores || [], 
-        });
-        console.log("El equipo fue creado con ID: ", docRef.id);
-    } catch (e) {
-        console.error("Error al crear el equipo", e);
-        throw e;  
-    }
+async function crearEquipo(nombre, capitan, jugadores) {  
+  try {
+    const docRef = await addDoc(collection(db, "equipos"), {
+      nombre: nombre,
+      capitan: capitan,           
+      jugadores: jugadores || [], 
+    });
+
+    console.log("El equipo fue creado con ID: ", docRef.id);
+    return docRef.id;
+
+  } catch (e) {
+    console.error("Error al crear el equipo", e);
+    throw e;  
+  }
 }
 
 async function consultarEquipos() {
@@ -47,14 +50,25 @@ async function consultarEquipo(id) {
     }
 }
 
-async function actualizarEquipo(id, nombre) {
+async function actualizarEquipo(idEquipo, nombre, idUsuario) {
   try {
-    const equipoRef = doc(db, "equipos", id);
-    await updateDoc(equipoRef, { 
-        nombre: nombre,
-    });
+    const equipoRef = doc(db, "equipos", idEquipo);
+    const equipoSnap = await getDoc(equipoRef);
+    
+    if (!equipoSnap.exists()) {
+      throw new Error("Equipo no existe");
+    }
+    
+    const equipoData = equipoSnap.data();
 
-    console.log("Equipo actualizado con ID: ", id);
+    // Validar que idUsuario sea el capitán
+    if (equipoData.capitan !== idUsuario) {
+      throw new Error("No autorizado: solo el capitán puede actualizar el equipo");
+    }
+
+    await updateDoc(equipoRef, { nombre });
+
+    console.log("Equipo actualizado con ID: ", idEquipo);
 
   } catch (e) {
     console.error("Error actualizando equipo: ", e);
@@ -62,26 +76,50 @@ async function actualizarEquipo(id, nombre) {
   }
 }
 
-async function eliminarEquipo(id) {
+async function eliminarEquipo(idEquipo, idUsuario) {
   try {
-    const equipoRef = doc(db, "equipos", id); 
+    const equipoRef = doc(db, "equipos", idEquipo);
+    const equipoSnap = await getDoc(equipoRef);
+
+    if (!equipoSnap.exists()) {
+      throw new Error("Equipo no existe");
+    }
+
+    const equipoData = equipoSnap.data();
+
+    if (equipoData.capitan !== idUsuario) {
+      throw new Error("No autorizado: solo el capitán puede eliminar el equipo");
+    }
+
     await deleteDoc(equipoRef);
 
-    console.log("Equipo eliminado con ID:", id);
-    
-  } catch (e) {
+    console.log("Equipo eliminado con ID:", idEquipo);
 
+  } catch (e) {
     console.error("Error al eliminar equipo:", e);
     throw e;  
   }
 }
 
-async function agregarJugador(idEquipo, idJugador) {
+async function agregarJugador(idEquipo, idJugador, idUsuario) {
   try {
     const equipoRef = doc(db, "equipos", idEquipo);
+    const equipoSnap = await getDoc(equipoRef);
+
+    if (!equipoSnap.exists()) {
+      throw new Error("Equipo no existe");
+    }
+
+    const equipoData = equipoSnap.data();
+
+    if (equipoData.capitan !== idUsuario) {
+      throw new Error("No autorizado: solo el capitán puede agregar jugadores");
+    }
+
     await updateDoc(equipoRef, {
       jugadores: arrayUnion(idJugador)
     });
+
     console.log(`Jugador ${idJugador} agregado al equipo ${idEquipo}`);
   } catch (e) {
     console.error("Error agregando jugador:", e);
@@ -89,12 +127,25 @@ async function agregarJugador(idEquipo, idJugador) {
   }
 }
 
-async function eliminarJugador(idEquipo, idJugador) { //validar que el usuario que ejecuta esto sea el capitán
+async function eliminarJugador(idEquipo, idJugador, idUsuario) {
   try {
     const equipoRef = doc(db, "equipos", idEquipo);
+    const equipoSnap = await getDoc(equipoRef);
+
+    if (!equipoSnap.exists()) {
+      throw new Error("Equipo no existe");
+    }
+
+    const equipoData = equipoSnap.data();
+
+    if (equipoData.capitan !== idUsuario) {
+      throw new Error("No autorizado: solo el capitán puede eliminar jugadores");
+    }
+
     await updateDoc(equipoRef, {
       jugadores: arrayRemove(idJugador)
     });
+
     console.log(`Jugador ${idJugador} eliminado del equipo ${idEquipo}`);
   } catch (e) {
     console.error("Error eliminando jugador:", e);
@@ -153,4 +204,4 @@ async function obtenerEdadesJugadores(idEquipo) {
   }
 }
 
-export { crearEquipo, consultarEquipos, consultarEquipo, actualizarEquipo, eliminarEquipo, agregarJugador, eliminarJugador, consultarJugadores, obtenerEdadesJugadores}; 
+export {crearEquipo, consultarEquipos, consultarEquipo, actualizarEquipo, eliminarEquipo, agregarJugador, eliminarJugador, consultarJugadores, obtenerEdadesJugadores}; 

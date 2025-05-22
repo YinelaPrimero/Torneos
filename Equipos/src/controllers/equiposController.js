@@ -4,13 +4,14 @@ import { crearEquipo, consultarEquipos, consultarEquipo, actualizarEquipo, elimi
 const router = Router(); 
 
 router.post('/equipos', async (req, res) => {
-    const { id, nombre, capitan, jugadores } = req.body;
-    try {
-        await crearEquipo(id, nombre, capitan, jugadores);
-        res.status(201).send("Equipo creado");
-    } catch (error) {
-        res.status(500).send("Error al crear el equipo");
-    }
+  const { nombre, capitan, jugadores } = req.body;  
+
+  try {
+    const idEquipo = await crearEquipo(nombre, capitan, jugadores);
+    res.status(201).json({ mensaje: "Equipo creado", id: idEquipo });
+  } catch (error) {
+    res.status(500).send("Error al crear el equipo");
+  }
 });
 
 router.get('/equipos', async (req, res) => {
@@ -38,48 +39,52 @@ router.get('/equipos/:id', async (req, res) => {
 
 router.put('/equipos/:id', async (req, res) => { 
     const id = req.params.id; 
-    const { nombre, cantidad_jugadores } = req.body;
+    const { nombre, cantidad_jugadores, idUsuario  } = req.body;
 
     try {
-        await actualizarEquipo(id, nombre, cantidad_jugadores);
+        await actualizarEquipo(id, nombre, cantidad_jugadores, idUsuario);
         res.send("Equipo actualizado");
     } catch (error) {
-        res.status(500).send("Error actualizando equipo");
+        res.status(403).send(error.message || "Error actualizando equipo");
     }
 });
 
 router.delete('/equipos/:id', async (req, res) => { 
     const id = req.params.id;
+    const { idUsuario } = req.body;
+
     try {
-        await eliminarEquipo(id);
+        await eliminarEquipo(id, idUsuario);
         res.send("Equipo eliminado");
     } catch (error) {
-        res.status(500).send("Error al eliminar equipo");
+        res.status(403).send(error.message || "Error al eliminar equipo");
     }
 });
 
 router.post('/equipos/:idEquipo/jugadores', async (req, res) => {
   const { idEquipo } = req.params;
-  const { idJugador } = req.body;
+  const { idJugador, idUsuario } = req.body;
 
   try {
-    await agregarJugador(idEquipo, idJugador);
+    await agregarJugador(idEquipo, idJugador, idUsuario);
     res.send(`Jugador ${idJugador} agregado`);
   } catch (error) {
-    res.status(500).send("Error al agregar jugador");
+    res.status(403).send(error.message || "Error al agregar jugador");
   }
 });
 
 router.delete('/equipos/:idEquipo/jugadores/:idJugador', async (req, res) => {
   const { idEquipo, idJugador } = req.params;
+  const { idUsuario } = req.body;
 
   try {
-    await eliminarJugador(idEquipo, idJugador);
+    await eliminarJugador(idEquipo, idJugador, idUsuario);
     res.send(`Jugador ${idJugador} eliminado`);
   } catch (error) {
-    res.status(500).send("Error al eliminar jugador");
+    res.status(403).send(error.message || "Error al eliminar jugador");
   }
 });
+
 
 router.get('/equipos/:idEquipo/jugadores', async (req, res) => {
   const { idEquipo } = req.params;

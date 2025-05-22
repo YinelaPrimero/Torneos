@@ -1,7 +1,8 @@
 import express from 'express';  
 import equipoController from './controllers/equiposController.js';  // Importa tu controlador
 import { initializeApp } from "firebase/app";  
-import { getFirestore } from "firebase/firestore";  
+import { getFirestore } from "firebase/firestore"; 
+import cors from 'cors'; 
 
 const firebaseConfig = {
   apiKey: "AIzaSyA-dfwrleFFhghRJO2z12Pp5uqnK6Ct2zE",
@@ -13,6 +14,7 @@ const firebaseConfig = {
 };
 
 const app = express();  
+app.use(cors()); 
 const firebaseApp = initializeApp(firebaseConfig);  
 export const db = getFirestore(firebaseApp);  
 
