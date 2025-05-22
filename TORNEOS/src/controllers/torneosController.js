@@ -11,6 +11,8 @@ import {
 
 import { verificarAdmin } from '../middlewares/verificarAdmin.js';
 
+import axios from 'axios';
+
 const router = Router();
 
 // Crear torneo (solo admin)
@@ -69,13 +71,42 @@ router.post('/torneos/:id/resultados', verificarAdmin, async (req, res) => {
   }
 });
 
-// Añadir equipo al torneo (sin validación admin)
+// Añadir equipo al torneo (validación de edad mínima)
 router.post('/torneos/:id/equipos', async (req, res) => {
+  const torneoId = req.params.id;
+  const equipoId = req.body.equipoId;
+
   try {
-    await añadirEquipoTorneo(req.params.id, req.body.equipoId);
+
+    const torneo = await consultarTorneo(torneoId);
+    if (!torneo) {
+      return res.status(404).send("Torneo no encontrado");
+    }
+
+    const edadMinima = torneo.edad_minima;
+
+  
+    const response = await axios.get(`http://localhost:3001/equipos/${equipoId}/edades-jugadores`);
+   
+
+    const edades = response.data.edades;
+    if (!edades || edades.length === 0) {
+      return res.status(400).send("No se encontraron jugadores en el equipo o edades vacías");
+    }
+
+
+    const todasCumplen = edades.every(edad => edad >= edadMinima);
+
+    if (!todasCumplen) {
+      return res.status(400).send(`Algunos jugadores no cumplen la edad mínima requerida: ${edadMinima} años`);
+    }
+
+
+    await añadirEquipoTorneo(torneoId, equipoId);
     res.send("Equipo añadido al torneo");
+
   } catch (error) {
-    console.error(error);
+    console.error("Error al añadir equipo al torneo:", error);
     res.status(500).send("Error al añadir equipo al torneo");
   }
 });
