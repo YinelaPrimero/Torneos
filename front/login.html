@@ -22,8 +22,8 @@
     <div class="login-container">
         <h2>Iniciar Sesión</h2>
         <div class="form-group">
-            <label for="contacto">Contacto</label>
-            <input type="text" id="contacto" placeholder="Ingrese su contacto">
+            <label for="contacto">Teléfono</label>
+            <input type="tel" id="contacto" placeholder="Ingrese su teléfono">
         </div>
         <div class="form-group">
             <label for="password">Contraseña</label>
@@ -58,6 +58,10 @@
                 }
 
                 const { id, isAdmin } = await response.json();
+                if (!id) {
+                    throw new Error('No se recibió un ID de usuario válido del servidor');
+                }
+                localStorage.setItem('userId', id);
                 if (isAdmin) {
                     window.location.href = '/front/dashboard_admin/dashboard_admin.html';
                 } else {
