@@ -1,15 +1,16 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  const equipoId = 'rxHVhO3ObnzE8ERMJ7gF'; // Cambia esto por el id real
+  const equipoId = 'rxHVhO3ObnzE8ERMJ7gF';  // Cambia por id dinámico real
+  const idUsuario = '0NqKJzQglbeuRlOIiy9y'; // ID del usuario logueado (capitán)
 
- const idUsuario = '0NqKJzQglbeuRlOIiy9y';  // Aquí pones el id del usuario (capitán)
-
-  // Elementos modal y formulario
+  // Elementos DOM
   const modal = document.getElementById('edit-team-modal');
   const btnEditar = document.getElementById('edit-team');
   const btnCancelar = document.getElementById('cancel-edit');
   const formEditar = document.getElementById('edit-team-form');
+  const btnEliminar = document.getElementById('delete-team');
+  const requestsSection = document.getElementById('requests-section');
+  const requestsList = document.getElementById('team-requests');
 
-  // Función para abrir modal y cargar datos (igual)
   async function abrirModalEdicion() {
     try {
       const res = await fetch(`http://localhost:3001/equipos/${equipoId}`);
@@ -26,15 +27,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  // Abrir modal con botón editar
-  btnEditar.addEventListener('click', abrirModalEdicion);
-
-  // Cerrar modal con botón cancelar
-  btnCancelar.addEventListener('click', () => {
-    modal.style.display = 'none';
-  });
-
-  // Guardar cambios con submit
   formEditar.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -47,7 +39,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
-    // Aquí agregamos idUsuario en el body
     const dataActualizar = { nombre, logo, descripcion, idUsuario };
 
     try {
@@ -62,7 +53,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       alert('Equipo actualizado con éxito');
       modal.style.display = 'none';
 
-      // Actualizar vista principal
       document.getElementById('team-name').textContent = nombre;
       document.getElementById('team-logo-img').src = logo || 'https://via.placeholder.com/150';
       document.getElementById('team-description').textContent = descripcion;
@@ -71,13 +61,129 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
+  btnCancelar.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
+
+  btnEditar.addEventListener('click', abrirModalEdicion);
+
+  btnEliminar.addEventListener('click', async () => {
+    if (!confirm('¿Estás seguro que quieres eliminar este equipo? Esta acción no se puede deshacer.')) return;
+
+    try {
+      const res = await fetch(`http://localhost:3001/equipos/${equipoId}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idUsuario }),
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(errorText || 'Error al eliminar equipo');
+      }
+
+      alert('Equipo eliminado exitosamente');
+      window.location.href = 'ver_equipo.html';
+    } catch (error) {
+      alert('No se pudo eliminar el equipo: ' + error.message);
+    }
+  });
+
+  async function cargarSolicitudesPendientes(id_equipo) {
+    try {
+      const resSolicitudes = await fetch(`http://localhost:3004/solicitudes/equipo/${id_equipo}`);
+      if (!resSolicitudes.ok) throw new Error('Error al obtener solicitudes');
+      const solicitudes = await resSolicitudes.json();
+
+      if (solicitudes.length === 0) {
+        requestsList.innerHTML = '<p>No hay solicitudes pendientes.</p>';
+        return;
+      }
+
+      const solicitudesConDatos = await Promise.all(
+        solicitudes.map(async (solicitud) => {
+          try {
+            const resUser = await fetch(`http://localhost:3003/usuarios/${solicitud.id_jugador}`);
+            if (!resUser.ok) throw new Error('Error al obtener usuario');
+            const userData = await resUser.json();
+            return {
+              ...solicitud,
+              nombreJugador: userData.nombre || 'Sin nombre',
+              posicionJugador: userData.posicion || 'Posición no definida',
+            };
+          } catch {
+            return {
+              ...solicitud,
+              nombreJugador: 'Jugador no encontrado',
+              posicionJugador: '',
+            };
+          }
+        })
+      );
+
+      requestsList.innerHTML = solicitudesConDatos.map(solicitud => `
+        <div class="request-item">
+          <div class="request-info">
+            <h4>${solicitud.nombreJugador}</h4>
+            <p>${solicitud.posicionJugador} • ${new Date(solicitud.fecha_solicitud || solicitud.date || '').toLocaleDateString()}</p>
+          </div>
+          <div class="request-actions">
+            <button class="btn btn-success btn-sm accept-request" data-id="${solicitud.id}">Aceptar</button>
+            <button class="btn btn-danger btn-sm reject-request" data-id="${solicitud.id}">Rechazar</button>
+          </div>
+        </div>
+      `).join('');
+
+      document.querySelectorAll('.accept-request').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const idSolicitud = btn.getAttribute('data-id');
+          if (!confirm('¿Aceptar esta solicitud?')) return;
+
+          try {
+            const res = await fetch(`http://localhost:3001/solicitudes/${idSolicitud}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ estado: 'aceptada' }),
+            });
+            if (!res.ok) throw new Error('Error al aceptar solicitud');
+            alert('Solicitud aceptada');
+            await cargarSolicitudesPendientes(id_equipo);
+          } catch (error) {
+            alert(error.message);
+          }
+        });
+      });
+
+      document.querySelectorAll('.reject-request').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const idSolicitud = btn.getAttribute('data-id');
+          if (!confirm('¿Rechazar esta solicitud?')) return;
+
+          try {
+            const res = await fetch(`http://localhost:3001/solicitudes/${idSolicitud}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ estado: 'rechazada' }),
+            });
+            if (!res.ok) throw new Error('Error al rechazar solicitud');
+            alert('Solicitud rechazada');
+            await cargarSolicitudesPendientes(id_equipo);
+          } catch (error) {
+            alert(error.message);
+          }
+        });
+      });
+
+    } catch (error) {
+      requestsList.innerHTML = `<p>Error cargando solicitudes: ${error.message}</p>`;
+    }
+  }
+
   try {
-    // Obtener datos equipo
     const equipoRes = await fetch(`http://localhost:3001/equipos/${equipoId}`);
     if (!equipoRes.ok) throw new Error('Error al obtener datos del equipo');
     const equipo = await equipoRes.json();
 
-    // Obtener nombre del capitán
     let nombreCapitan = 'Desconocido';
     if (equipo.capitan) {
       try {
@@ -86,18 +192,15 @@ document.addEventListener('DOMContentLoaded', async () => {
           const capitanData = await capitanRes.json();
           nombreCapitan = capitanData.nombre || 'Desconocido';
         }
-      } catch {
-        // ignorar error
-      }
+      } catch {}
+
     }
 
-    // Actualizar info básica
     document.getElementById('team-name').textContent = equipo.nombre;
     document.getElementById('team-logo-img').src = equipo.logo || 'https://via.placeholder.com/150';
     document.getElementById('team-captain').textContent = nombreCapitan;
     document.getElementById('team-description').textContent = equipo.descripcion || '';
 
-    // Obtener jugadores detallados
     const jugadoresDetalles = await Promise.all(
       (equipo.jugadores || []).map(async (jugadorId) => {
         try {
@@ -123,15 +226,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       })
     );
 
-    // Actualizar contador de jugadores
     const playersHeader = document.querySelector('.card-header h2');
     if (playersHeader) {
       const playersCount = jugadoresDetalles.length;
-      const maxPlayers = equipo.cantidad_jugadores || '?';
       playersHeader.innerHTML = `<i class="fas fa-users"></i> Jugadores (${playersCount})`;
     }
 
-    // Mostrar jugadores
     const playersGrid = document.getElementById('team-players');
     playersGrid.innerHTML = jugadoresDetalles.map(player => `
       <div class="player-card ${player.isCaptain ? 'captain' : ''}">
@@ -143,23 +243,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       </div>
     `).join('');
 
-    // Mostrar solicitudes si es capitán
-    if (equipo.isCaptain) {
-      document.getElementById('requests-section').style.display = 'block';
-      const requestsList = document.getElementById('team-requests');
-      requestsList.innerHTML = (equipo.requests || []).map(request => `
-        <div class="request-item">
-          <div class="request-info">
-            <h4>${request.playerName}</h4>
-            <p>${request.position} • ${request.date}</p>
-          </div>
-          <div class="request-actions">
-            <button class="btn btn-success btn-sm accept-request" data-id="${request.id}">Aceptar</button>
-            <button class="btn btn-danger btn-sm reject-request" data-id="${request.id}">Rechazar</button>
-          </div>
-        </div>
-      `).join('');
-    }
+    // Mostrar siempre solicitudes
+    requestsSection.style.display = 'block';
+    await cargarSolicitudesPendientes(equipoId);
+
   } catch (error) {
     console.error('Error cargando datos del equipo:', error);
     alert('Error al cargar la información del equipo. Intenta recargar la página.');

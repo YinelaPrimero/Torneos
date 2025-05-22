@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import solicitudController from './controllers/solicitudController.js';  
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
@@ -18,7 +19,7 @@ export const db = getFirestore(firebaseApp);
 
 
 app.use(express.json());
-
+app.use(cors());
 app.use(solicitudController);
 
 const PORT = 3004;

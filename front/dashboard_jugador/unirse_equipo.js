@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const teamsList = document.getElementById('available-teams');
 
+  // Simula el ID del jugador logueado, reemplaza con el real de tu sistema
+  const jugadorId = 'KtQK3JfEuEStQGS5sB2Q';
+
   try {
     const response = await fetch('http://localhost:3001/equipos');
     if (!response.ok) throw new Error('Error al obtener equipos');
@@ -43,14 +46,39 @@ document.addEventListener('DOMContentLoaded', async () => {
       </div>
     `).join('');
 
+    // Función para enviar solicitud al backend
+    async function enviarSolicitud(equipoId) {
+      try {
+        const res = await fetch('http://localhost:3004/solicitudes', { 
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: '',           
+            id_jugador: jugadorId,
+            id_equipo: equipoId,
+            estado: 'pendiente'
+          })
+        });
+
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(text || 'Error enviando solicitud');
+        }
+
+        alert('Solicitud enviada con éxito');
+      } catch (error) {
+        alert('No se pudo enviar la solicitud: ' + error.message);
+        console.error(error);
+      }
+    }
+
     // Agregar listeners para los botones de unirse
     document.querySelectorAll('.join-team').forEach(btn => {
       btn.addEventListener('click', function() {
         const teamId = this.getAttribute('data-id');
         const team = equiposConCapitan.find(t => t.id === teamId);
         if (confirm(`¿Enviar solicitud para unirte a ${team.nombre}?`)) {
-          alert(`Solicitud enviada al equipo!`);
-          // Aquí va la llamada real al backend para enviar solicitud
+          enviarSolicitud(teamId);
         }
       });
     });
