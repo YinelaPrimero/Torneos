@@ -11,7 +11,7 @@ import {
 const router = Router();
 
 // Crear un partido
-router.post('/partidos', async (req, res) => {
+router.post('/Partidos', async (req, res) => {
   const partido = req.body;
   try {
     await crearPartido(partido);
@@ -23,7 +23,7 @@ router.post('/partidos', async (req, res) => {
 });
 
 // Obtener partido por ID
-router.get('/partidos/:id', async (req, res) => {
+router.get('/Partidos/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const partido = await consultarPartidoPorId(id);
@@ -39,7 +39,7 @@ router.get('/partidos/:id', async (req, res) => {
 });
 
 // Obtener todos los partidos
-router.get('/partidos', async (req, res) => {
+router.get('/Partidos', async (req, res) => {
   try {
     const partidos = await consultarPartidos();
     res.json(partidos);
@@ -50,7 +50,7 @@ router.get('/partidos', async (req, res) => {
 });
 
 // Actualizar resultado
-router.put('/partidos/:id/resultado', async (req, res) => {
+router.put('/Partidos/:id/resultado', async (req, res) => {
   const { id } = req.params;
   const { goles_local, goles_visitante, resultado } = req.body;
 
@@ -64,7 +64,7 @@ router.put('/partidos/:id/resultado', async (req, res) => {
 });
 
 // Actualizar estado
-router.put('/partidos/:id/estado', async (req, res) => {
+router.put('/Partidos/:id/estado', async (req, res) => {
   const { id } = req.params;
   const { estado } = req.body;
 
@@ -78,7 +78,7 @@ router.put('/partidos/:id/estado', async (req, res) => {
 });
 
 // Obtener partidos por torneo
-router.get('/partidos/torneos/:id', async (req, res) => {
+router.get('/Partidos/torneos/:id', async (req, res) => {
   const idTorneo = req.params.id;
   const authHeader = req.headers.authorization;
 
