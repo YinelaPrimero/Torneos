@@ -21,7 +21,7 @@ async function crearPartido(partido) {
   }
 }
 
-// Consultar partido por ID lógico (campo 'id')
+// Consultar partido por ID lÃ³gico (campo 'id')
 async function consultarPartidoPorId(idBuscado) {
   try {
     const q = query(collection(db, 'Partidos'), where('id', '==', idBuscado));
@@ -78,32 +78,32 @@ async function actualizarEstadoPartido(idBuscado, estado) {
 }
 
 // Consultar partidos por torneo
-async function consultarPartidosPorTorneo(idTorneo) {
+async function consultarPartidosPorTorneo(idTorneo, authHeader) {
   try {
+    // Consulta partidos en Firestore filtrando por torneo
     const q = query(collection(db, 'Partidos'), where('torneo', '==', idTorneo));
     const snapshot = await getDocs(q);
-    const partidos = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const partidos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
     let torneoInfo = null;
     try {
-      const response = await axios.get(`http://localhost:3002/torneos/${idTorneo}`);
+      // Reenvía el token en headers a microservicio torneos
+      const response = await axios.get(`http://localhost:3002/torneos/${idTorneo}`, {
+        headers: { Authorization: authHeader }
+      });
       torneoInfo = response.data;
     } catch (e) {
-      console.warn('No se pudo obtener info del torneo en el microservicio 3002');
+      console.warn('No se pudo obtener info del torneo en el microservicio 3002:', e.message);
     }
 
-    return {
-      torneo: torneoInfo,
-      partidos,
-    };
+    return { torneo: torneoInfo, partidos };
   } catch (e) {
     console.error('Error al consultar partidos por torneo:', e);
     throw e;
   }
 }
+
+
 
 export {
   crearPartido,
