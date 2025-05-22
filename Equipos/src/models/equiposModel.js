@@ -2,11 +2,12 @@ import { addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, arrayUnion, arrayRe
 import { db } from "../index.js";
 import axios from 'axios'; 
 
-async function crearEquipo(nombre, capitan, jugadores) {  
+async function crearEquipo(nombre, capitan, descripcion, jugadores) {  
   try {
     const docRef = await addDoc(collection(db, "equipos"), {
       nombre: nombre,
-      capitan: capitan,           
+      capitan: capitan,
+      descripcion : descripcion,           
       jugadores: jugadores || [], 
     });
 
