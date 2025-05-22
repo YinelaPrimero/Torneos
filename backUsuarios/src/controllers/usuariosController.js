@@ -16,29 +16,15 @@ router.post('/usuarios', async (req, res) => {
             return res.status(400).send("El contacto ya está registrado");
         }
         const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-        // Permitir isAdmin: true solo si la colección está vacía (primer administrador)
         const usuarios = await consultarUsuarios();
         let finalIsAdmin = false;
         if (usuarios.length === 0 && isAdmin === true) {
-            finalIsAdmin = true; // Primer usuario puede ser admin
+            finalIsAdmin = true;
         } else if (isAdmin !== undefined && isAdmin !== false) {
             return res.status(403).send("Solo el primer usuario o un administrador existente puede establecer isAdmin: true");
         }
         await crearUsuario({ 
-            nombre, 
-            foto, 
-            edad, 
-            sexo_biologico, 
-            descripcion, 
-            posicion, 
-            goles, 
-            contacto, 
-            ubicacion, 
-            eps, 
-            tipo_sangre, 
-            contacto_emergencia, 
-            password: hashedPassword,
-            isAdmin: finalIsAdmin
+            nombre, foto, edad, sexo_biologico, descripcion, posicion, goles, contacto, ubicacion, eps, tipo_sangre, contacto_emergencia, password: hashedPassword, isAdmin: finalIsAdmin 
         });
         res.status(201).send("Usuario creado");
     } catch (error) {
@@ -47,10 +33,32 @@ router.post('/usuarios', async (req, res) => {
     }
 });
 
+router.post('/login', async (req, res) => {
+    const { contacto, password } = req.body;
+    try {
+        if (!contacto || !password) {
+            return res.status(400).send("Contacto y contraseña son obligatorios");
+        }
+        const usuarios = await consultarUsuarios();
+        const usuario = usuarios.find(u => u.contacto === contacto);
+        if (!usuario) {
+            return res.status(401).send("Contacto no encontrado");
+        }
+        const match = await bcrypt.compare(password, usuario.password);
+        if (!match) {
+            return res.status(401).send("Contraseña incorrecta");
+        }
+        const { password: _, ...usuarioSinPassword } = usuario;
+        res.json({ id: usuario.id, isAdmin: usuario.isAdmin });
+    } catch (error) {
+        console.error("Error en POST /login:", error);
+        res.status(500).send("Error al iniciar sesión");
+    }
+});
+
 router.get('/usuarios', async (req, res) => {
     try {
         const result = await consultarUsuarios();
-        // Excluir password, incluir isAdmin
         const usuariosSinPassword = result.map(({ password, ...resto }) => resto);
         res.json(usuariosSinPassword);
     } catch (error) {
@@ -66,7 +74,6 @@ router.get('/usuarios/:id', async (req, res) => {
         if (!result) {
             return res.status(404).send("Usuario no encontrado");
         }
-        // Excluir password, incluir isAdmin
         const { password, ...usuarioSinPassword } = result;
         res.json(usuarioSinPassword);
     } catch (error) {
@@ -87,19 +94,7 @@ router.put('/usuarios/:id', async (req, res) => {
         }
         const hashedPassword = password ? await bcrypt.hash(password, SALT_ROUNDS) : undefined;
         await actualizarUsuario(id, { 
-            nombre, 
-            foto, 
-            edad, 
-            sexo_biologico, 
-            descripcion, 
-            posicion, 
-            goles, 
-            contacto, 
-            ubicacion, 
-            eps, 
-            tipo_sangre, 
-            contacto_emergencia, 
-            password: hashedPassword 
+            nombre, foto, edad, sexo_biologico, descripcion, posicion, goles, contacto, ubicacion, eps, tipo_sangre, contacto_emergencia, password: hashedPassword 
         });
         res.send("Usuario actualizado");
     } catch (error) {
@@ -123,11 +118,9 @@ router.patch('/usuarios/:id/admin', async (req, res) => {
     const { id } = req.params;
     const { isAdmin, adminId } = req.body;
     try {
-        // Validar que isAdmin sea booleano
         if (typeof isAdmin !== 'boolean') {
             return res.status(400).send("El campo isAdmin debe ser un booleano (true o false)");
         }
-        // Verificar que el solicitante exista y sea administrador
         const solicitante = await consultarUsuarioPorId(adminId);
         if (!solicitante) {
             return res.status(404).send("Administrador no encontrado");
@@ -135,12 +128,10 @@ router.patch('/usuarios/:id/admin', async (req, res) => {
         if (!solicitante.isAdmin) {
             return res.status(403).send("Solo un administrador puede modificar el rol de administrador");
         }
-        // Verificar que el usuario a modificar exista
         const usuario = await consultarUsuarioPorId(id);
         if (!usuario) {
             return res.status(404).send("Usuario a modificar no encontrado");
         }
-        // Actualizar el estado isAdmin
         await actualizarUsuario(id, { isAdmin });
         res.send(`Rol de administrador ${isAdmin ? 'otorgado' : 'revocado'} para el usuario ${id}`);
     } catch (error) {

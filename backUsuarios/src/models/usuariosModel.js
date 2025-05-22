@@ -58,7 +58,6 @@ async function consultarUsuarioPorId(id) {
 async function actualizarUsuario(id, data) {
     try {
         const docRef = doc(db, "usuarios", id);
-        // Filtrar campos con valores definidos
         const updateData = {};
         if (data.nombre !== undefined) updateData.nombre = data.nombre;
         if (data.foto !== undefined) updateData.foto = data.foto;

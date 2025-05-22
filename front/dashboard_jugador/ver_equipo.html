@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalles del Equipo</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/jugador.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="logo">FootPlayer</div>
+      <ul>
+        <li class="active"><i class="fas fa-home"></i> <a href="dashboard_jugador.html">Inicio</a></li>
+        <li><i class="fas fa-user"></i> <a href="perfil.html">Mi Perfil</a></li>
+        <li><i class="fas fa-users"></i> <a href="equipo.html">Mi Equipo</a></li>
+        <li><i class="fas fa-trophy"></i> <a href="torneos.html">Torneos</a></li>
+        <li><i class="fas fa-chart-bar"></i> <a href="estadisticas.html">Estadísticas</a></li>
+        <li><i class="fas fa-trophy"></i><a href="crear_equipo.html">Crear Equipo</a></li>
+        <li><i class="fas fa-trophy"></i><a href="ver_equipo.html">Ver equipos</a></li>
+        <li><i class="fas fa-trophy"></i><a href="unirse_equipo.html">Unirse a equipo</a></li>
+        <li><i class="fas fa-cog"></i> <a href="#">Configuración</a></li>
+        <li><i class="fas fa-sign-out-alt"></i> <a href="../login.html">Cerrar Sesión</a></li>
+      </ul>
+      <div class="footer">© 2025 FootPlayer</div>
+    </nav>
+    
+    <div class="main">
+      <header class="main-header">
+        <h1 id="team-name">Los Tigres</h1>
+        <button class="btn btn-secondary" id="edit-team">Editar Equipo</button>
+      </header>
+      
+      <section class="content">
+        <div class="team-profile">
+          <div class="team-header">
+            <img src="https://via.placeholder.com/150" alt="Logo del equipo" class="team-logo" id="team-logo-img">
+            <div class="team-info">
+              <p><strong>Capitán:</strong> <span id="team-captain">Juan Pérez</span></p>
+              <p><strong>Torneo actual:</strong> <span id="team-tournament">Torneo de Verano 2025</span></p>
+              <p id="team-description">Equipo fundado en 2020 con jugadores locales apasionados por el fútbol.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2><i class="fas fa-users"></i> Jugadores (12/16)</h2>
+            <button class="btn btn-primary" id="invite-player">Invitar Jugador</button>
+          </div>
+          <div class="players-grid" id="team-players">
+            <!-- Jugadores cargados dinámicamente -->
+          </div>
+        </div>
+
+        <!-- Sección SOLO para capitanes -->
+        <div class="card captain-only" id="requests-section">
+          <h2><i class="fas fa-envelope"></i> Solicitudes Pendientes</h2>
+          <div class="requests-list" id="team-requests">
+            <!-- Solicitudes cargadas dinámicamente -->
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // Datos de ejemplo (simularían la respuesta del backend)
+    const teamData = {
+      id: "equipo123",
+      name: "Los Tigres",
+      logo: "https://via.placeholder.com/150",
+      captain: "Juan Pérez",
+      tournament: "Torneo de Verano 2025",
+      description: "Equipo fundado en 2020 con jugadores locales apasionados por el fútbol.",
+      players: [
+        { id: "1", name: "Juan Pérez", position: "Delantero", avatar: "https://via.placeholder.com/80", isCaptain: true },
+        { id: "2", name: "Carlos Gómez", position: "Mediocampista", avatar: "https://via.placeholder.com/80" }
+      ],
+      requests: [
+        { id: "req1", playerId: "3", playerName: "Luis Martínez", position: "Defensa", date: "2025-06-15" }
+      ],
+      isCaptain: true // Esto vendría del backend según el usuario logueado
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Cargar datos del equipo
+      document.getElementById('team-name').textContent = teamData.name;
+      document.getElementById('team-logo-img').src = teamData.logo;
+      document.getElementById('team-captain').textContent = teamData.captain;
+      document.getElementById('team-tournament').textContent = teamData.tournament;
+      document.getElementById('team-description').textContent = teamData.description;
+
+      // Cargar jugadores
+      const playersGrid = document.getElementById('team-players');
+      playersGrid.innerHTML = teamData.players.map(player => `
+        <div class="player-card ${player.isCaptain ? 'captain' : ''}">
+          <img src="${player.avatar}" alt="${player.name}" class="player-avatar">
+          <h3>${player.name} ${player.isCaptain ? '👑' : ''}</h3>
+          <p>${player.position}</p>
+          ${teamData.isCaptain && !player.isCaptain ? 
+            `<button class="btn btn-danger btn-sm remove-player" data-id="${player.id}">Eliminar</button>` : ''}
+        </div>
+      `).join('');
+
+      // Cargar solicitudes (solo para capitanes)
+      if(teamData.isCaptain) {
+        document.getElementById('requests-section').style.display = 'block';
+        const requestsList = document.getElementById('team-requests');
+        requestsList.innerHTML = teamData.requests.map(request => `
+          <div class="request-item">
+            <div class="request-info">
+              <h4>${request.playerName}</h4>
+              <p>${request.position} • ${request.date}</p>
+            </div>
+            <div class="request-actions">
+              <button class="btn btn-success btn-sm accept-request" data-id="${request.id}">Aceptar</button>
+              <button class="btn btn-danger btn-sm reject-request" data-id="${request.id}">Rechazar</button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Event listeners
+      document.getElementById('edit-team').addEventListener('click', () => {
+        alert('Redirigir a edición de equipo');
+      });
+
+      document.getElementById('invite-player').addEventListener('click', () => {
+        alert('Funcionalidad para invitar jugadores');
+      });
+    });
+  </script>
+
+  <style>
+    /* Estilos adicionales */
+    .captain-only {
+      display: none; /* Oculto por defecto */
+    }
+    
+    .player-card.captain {
+      border: 2px solid #008f39;
+    }
+    
+    .request-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .request-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+  </style>
+</body>
+</html>
