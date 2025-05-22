@@ -77,39 +77,41 @@ router.post('/torneos/:id/equipos', async (req, res) => {
   const equipoId = req.body.equipoId;
 
   try {
-
     const torneo = await consultarTorneo(torneoId);
     if (!torneo) {
       return res.status(404).send("Torneo no encontrado");
     }
 
-    const edadMinima = torneo.edad_minima;
+    const edadMinima = Number(torneo.edad_minima);
+    if (isNaN(edadMinima)) {
+      return res.status(500).send("Edad mínima inválida en el torneo");
+    }
 
-  
     const response = await axios.get(`http://localhost:3001/equipos/${equipoId}/edades-jugadores`);
-   
 
     const edades = response.data.edades;
     if (!edades || edades.length === 0) {
       return res.status(400).send("No se encontraron jugadores en el equipo o edades vacías");
     }
 
-
+    console.log("edadMinima del torneo:", edadMinima);
+    console.log("edades de jugadores:", edades);
     const todasCumplen = edades.every(edad => edad >= edadMinima);
+    console.log("¿Todas cumplen la edad mínima?:", todasCumplen);
 
     if (!todasCumplen) {
       return res.status(400).send(`Algunos jugadores no cumplen la edad mínima requerida: ${edadMinima} años`);
     }
 
-
     await añadirEquipoTorneo(torneoId, equipoId);
-    res.send("Equipo añadido al torneo");
+    return res.send("Equipo añadido al torneo");
 
   } catch (error) {
     console.error("Error al añadir equipo al torneo:", error);
-    res.status(500).send("Error al añadir equipo al torneo");
+    return res.status(500).send("Error al añadir equipo al torneo");
   }
 });
+
 
 // Consultar equipos inscritos en un torneo (sin validación admin)
 router.get('/torneos/:id/equipos', async (req, res) => {
