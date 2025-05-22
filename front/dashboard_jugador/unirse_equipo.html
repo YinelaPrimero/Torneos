@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unirse a Equipo</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/jugador.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="logo">FootPlayer</div>
+      <ul>
+        <li class="active"><i class="fas fa-home"></i> <a href="dashboard_jugador.html">Inicio</a></li>
+        <li><i class="fas fa-user"></i> <a href="perfil.html">Mi Perfil</a></li>
+        <li><i class="fas fa-users"></i> <a href="equipo.html">Mi Equipo</a></li>
+        <li><i class="fas fa-trophy"></i> <a href="torneos.html">Torneos</a></li>
+        <li><i class="fas fa-chart-bar"></i> <a href="estadisticas.html">Estadísticas</a></li>
+        <li><i class="fas fa-trophy"></i><a href="crear_equipo.html">Crear Equipo</a></li>
+        <li><i class="fas fa-trophy"></i><a href="ver_equipo.html">Ver equipos</a></li>
+        <li><i class="fas fa-trophy"></i><a href="unirse_equipo.html">Unirse a equipo</a></li>
+        <li><i class="fas fa-cog"></i> <a href="#">Configuración</a></li>
+        <li><i class="fas fa-sign-out-alt"></i> <a href="../login.html">Cerrar Sesión</a></li>
+      </ul>
+      <div class="footer">© 2025 FootPlayer</div>
+    </nav>
+    
+    <div class="main">
+      <header class="main-header">
+        <h1>Unirse a un Equipo</h1>
+        <div class="search-box">
+          <input type="text" id="team-search" placeholder="Buscar equipos...">
+          <button class="btn btn-secondary"><i class="fas fa-search"></i></button>
+        </div>
+      </header>
+      
+      <section class="content">
+        <div class="card">
+          <h2><i class="fas fa-list"></i> Equipos Disponibles</h2>
+          <div class="teams-list" id="available-teams">
+            <!-- Equipos cargados dinámicamente -->
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // Datos de ejemplo (simularían la respuesta del backend)
+    const availableTeams = [
+      {
+        id: "equipo1",
+        name: "Los Tigres",
+        logo: "https://via.placeholder.com/80",
+        captain: "Juan Pérez",
+        players: 12,
+        maxPlayers: 16,
+        tournament: "Torneo de Verano 2025",
+        description: "Equipo competitivo buscando delanteros y defensas"
+      },
+      {
+        id: "equipo2",
+        name: "Águilas FC",
+        logo: "https://via.placeholder.com/80",
+        captain: "Carlos Rojas",
+        players: 10,
+        maxPlayers: 16,
+        tournament: "Copa Amistad",
+        description: "Equipo amistoso para jugadores intermedios"
+      }
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const teamsList = document.getElementById('available-teams');
+      
+      teamsList.innerHTML = availableTeams.map(team => `
+        <div class="team-card">
+          <div class="team-header">
+            <img src="${team.logo}" alt="${team.name}" class="team-logo-sm">
+            <div class="team-info">
+              <h3>${team.name}</h3>
+              <p>${team.players}/${team.maxPlayers} jugadores • ${team.tournament}</p>
+              <p class="team-desc">${team.description}</p>
+              <p><strong>Capitán:</strong> ${team.captain}</p>
+            </div>
+          </div>
+          <div class="team-actions">
+            <button class="btn btn-primary join-team" data-id="${team.id}">Enviar Solicitud</button>
+            <button class="btn btn-secondary">Ver Detalles</button>
+          </div>
+        </div>
+      `).join('');
+
+      // Event listener para botones de unirse
+      document.querySelectorAll('.join-team').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const teamId = this.getAttribute('data-id');
+          if(confirm(`¿Enviar solicitud para unirte a ${availableTeams.find(t => t.id === teamId).name}?`)) {
+            alert(`Solicitud enviada al equipo!`);
+            // Aquí iría la llamada al backend para enviar la solicitud
+          }
+        });
+      });
+
+      // Búsqueda simple
+      document.getElementById('team-search').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        document.querySelectorAll('.team-card').forEach(card => {
+          const teamName = card.querySelector('h3').textContent.toLowerCase();
+          card.style.display = teamName.includes(searchTerm) ? 'block' : 'none';
+        });
+      });
+    });
+  </script>
+
+  <style>
+    /* Estilos adicionales */
+    .team-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .team-header {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .team-logo-sm {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .team-desc {
+      color: #4b5563;
+      font-style: italic;
+      margin: 0.5rem 0;
+    }
+    
+    .team-actions {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-end;
+    }
+    
+    .search-box {
+      display: flex;
+      gap: 0.5rem;
+    }
+  </style>
+</body>
+</html>

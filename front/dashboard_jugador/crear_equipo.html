@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear Nuevo Equipo</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="logo">FootPlayer</div>
+      <ul>
+        <li class="active"><i class="fas fa-home"></i> <a href="dashboard_jugador.html">Inicio</a></li>
+        <li><i class="fas fa-user"></i> <a href="perfil.html">Mi Perfil</a></li>
+        <li><i class="fas fa-users"></i> <a href="equipo.html">Mi Equipo</a></li>
+        <li><i class="fas fa-trophy"></i> <a href="torneos.html">Torneos</a></li>
+        <li><i class="fas fa-chart-bar"></i> <a href="estadisticas.html">Estadísticas</a></li>
+        <li><i class="fas fa-trophy"></i><a href="crear_equipo.html">Crear Equipo</a></li>
+        <li><i class="fas fa-trophy"></i><a href="ver_equipo.html">Ver equipos</a></li>
+        <li><i class="fas fa-trophy"></i><a href="unirse_equipo.html">Unirse a equipo</a></li>
+        <li><i class="fas fa-cog"></i> <a href="#">Configuración</a></li>
+        <li><i class="fas fa-sign-out-alt"></i> <a href="../login.html">Cerrar Sesión</a></li>
+      </ul>
+      <div class="footer">© 2025 FootPlayer</div>
+    </nav>
+    
+    <div class="main">
+      <header class="main-header">
+        <h1>Crear Nuevo Equipo</h1>
+      </header>
+      
+      <section class="content">
+        <div class="card">
+          <form id="team-form">
+            <div class="form-group">
+              <label for="team-name">Nombre del equipo*</label>
+              <input type="text" id="team-name" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="team-logo">Logo del equipo (URL)</label>
+              <input type="url" id="team-logo" class="form-control" placeholder="https://...">
+              <small>Opcional. Puedes subirlo después.</small>
+            </div>
+            
+            <div class="form-group">
+              <label for="team-description">Descripción</label>
+              <textarea id="team-description" class="form-control" rows="3"></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="team-tournament">Torneo (opcional)</label>
+              <select id="team-tournament" class="form-control">
+                <option value="">Seleccionar torneo...</option>
+                <option value="1">Torneo de Verano 2025</option>
+                <option value="2">Copa Amistad</option>
+              </select>
+            </div>
+            
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" id="cancel-team">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Crear Equipo</button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('team-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const teamData = {
+        name: document.getElementById('team-name').value,
+        logo: document.getElementById('team-logo').value,
+        description: document.getElementById('team-description').value,
+        tournament: document.getElementById('team-tournament').value
+      };
+      
+      // Aquí iría la llamada al backend
+      console.log('Datos del equipo:', teamData);
+      alert('Equipo creado exitosamente!');
+      window.location.href = 'ver-equipo.html?id=nuevo-id'; // Redirigir a vista de equipo
+    });
+    
+    document.getElementById('cancel-team').addEventListener('click', function() {
+      if(confirm('¿Seguro que deseas cancelar? Los datos no se guardarán.')) {
+        window.history.back();
+      }
+    });
+  </script>
+</body>
+</html>
