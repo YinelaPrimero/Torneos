@@ -14,7 +14,8 @@ const firebaseConfig = {
 };
 
 const app = express();  
-app.use(cors()); 
+app.use(cors());
+app.use(express.json()) 
 const firebaseApp = initializeApp(firebaseConfig);  
 export const db = getFirestore(firebaseApp);  
 

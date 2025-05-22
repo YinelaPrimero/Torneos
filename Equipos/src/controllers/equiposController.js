@@ -4,10 +4,10 @@ import { crearEquipo, consultarEquipos, consultarEquipo, actualizarEquipo, elimi
 const router = Router(); 
 
 router.post('/equipos', async (req, res) => {
-  const { nombre, capitan, descripcion, jugadores } = req.body;  
+  const { nombre, capitan, descripcion, logo, jugadores } = req.body;  
 
   try {
-    const idEquipo = await crearEquipo(nombre, capitan, descripcion, jugadores);
+    const idEquipo = await crearEquipo(nombre, capitan, descripcion, logo, jugadores);
     res.status(201).json({ mensaje: "Equipo creado", id: idEquipo });
   } catch (error) {
     res.status(500).send("Error al crear el equipo");

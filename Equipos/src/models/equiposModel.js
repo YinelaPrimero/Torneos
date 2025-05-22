@@ -2,13 +2,14 @@ import { addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, arrayUnion, arrayRe
 import { db } from "../index.js";
 import axios from 'axios'; 
 
-async function crearEquipo(nombre, capitan, descripcion, jugadores) {  
+async function crearEquipo(nombre, capitan, descripcion, logo, jugadores) {  
   try {
     const docRef = await addDoc(collection(db, "equipos"), {
       nombre: nombre,
       capitan: capitan,
-      descripcion : descripcion,           
-      jugadores: jugadores || [], 
+      descripcion: descripcion,
+      logo: logo,
+      jugadores: jugadores || [],
     });
 
     console.log("El equipo fue creado con ID: ", docRef.id);
