@@ -2,12 +2,14 @@ import { addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, arrayUnion, arrayRe
 import { db } from "../index.js";
 import axios from 'axios'; 
 
-async function crearEquipo(nombre, capitan, jugadores) {  
+async function crearEquipo(nombre, capitan, descripcion, logo, jugadores) {  
   try {
     const docRef = await addDoc(collection(db, "equipos"), {
       nombre: nombre,
-      capitan: capitan,           
-      jugadores: jugadores || [], 
+      capitan: capitan,
+      descripcion: descripcion,
+      logo: logo,
+      jugadores: jugadores || [],
     });
 
     console.log("El equipo fue creado con ID: ", docRef.id);
@@ -50,7 +52,7 @@ async function consultarEquipo(id) {
     }
 }
 
-async function actualizarEquipo(idEquipo, nombre, idUsuario) {
+async function actualizarEquipo(idEquipo, nombre, logo, descripcion, idUsuario) {
   try {
     const equipoRef = doc(db, "equipos", idEquipo);
     const equipoSnap = await getDoc(equipoRef);
@@ -66,7 +68,7 @@ async function actualizarEquipo(idEquipo, nombre, idUsuario) {
       throw new Error("No autorizado: solo el capitán puede actualizar el equipo");
     }
 
-    await updateDoc(equipoRef, { nombre });
+    await updateDoc(equipoRef, { nombre, logo, descripcion });
 
     console.log("Equipo actualizado con ID: ", idEquipo);
 

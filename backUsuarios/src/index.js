@@ -3,7 +3,6 @@ import cors from 'cors';
 import usuariosController from './controllers/usuariosController.js';
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import cors from 'cors'; 
 
 const firebaseConfig = {
     apiKey: "AIzaSyA-dfwrleFFhghRJO2z12Pp5uqnK6Ct2zE",
@@ -14,14 +13,13 @@ const firebaseConfig = {
     appId: "1:977844691436:web:707685de9dd396962320c9"
 };
 
-const app = express();
-app.use(cors()); 
+const app = express(); 
 const firebaseApp = initializeApp(firebaseConfig);
 export const db = getFirestore(firebaseApp);
 
 app.use(cors());
 app.use(express.json());
-app.use('/api', usuariosController);
+app.use(usuariosController);
 
 const PORT = 3003;
 app.listen(PORT, () => {

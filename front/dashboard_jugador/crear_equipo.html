@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Crear Nuevo Equipo</title>
-  <link rel="stylesheet" href="../css/styles.css">
-  <link rel="stylesheet" href="../css/admin.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/admin.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+  />
 </head>
 <body>
   <div class="container">
@@ -26,42 +29,48 @@
       </ul>
       <div class="footer">© 2025 FootPlayer</div>
     </nav>
-    
+
     <div class="main">
       <header class="main-header">
         <h1>Crear Nuevo Equipo</h1>
       </header>
-      
+
       <section class="content">
         <div class="card">
           <form id="team-form">
             <div class="form-group">
               <label for="team-name">Nombre del equipo*</label>
-              <input type="text" id="team-name" class="form-control" required>
+              <input type="text" id="team-name" class="form-control" required />
             </div>
-            
+
             <div class="form-group">
               <label for="team-logo">Logo del equipo (URL)</label>
-              <input type="url" id="team-logo" class="form-control" placeholder="https://...">
+              <input
+                type="url"
+                id="team-logo"
+                class="form-control"
+                placeholder="https://..."
+              />
               <small>Opcional. Puedes subirlo después.</small>
             </div>
-            
+
             <div class="form-group">
               <label for="team-description">Descripción</label>
-              <textarea id="team-description" class="form-control" rows="3"></textarea>
+              <textarea
+                id="team-description"
+                class="form-control"
+                rows="3"
+              ></textarea>
             </div>
-            
-            <div class="form-group">
-              <label for="team-tournament">Torneo (opcional)</label>
-              <select id="team-tournament" class="form-control">
-                <option value="">Seleccionar torneo...</option>
-                <option value="1">Torneo de Verano 2025</option>
-                <option value="2">Copa Amistad</option>
-              </select>
-            </div>
-            
+
             <div class="form-actions">
-              <button type="button" class="btn btn-secondary" id="cancel-team">Cancelar</button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                id="cancel-team"
+              >
+                Cancelar
+              </button>
               <button type="submit" class="btn btn-primary">Crear Equipo</button>
             </div>
           </form>
@@ -71,23 +80,45 @@
   </div>
 
   <script>
-    document.getElementById('team-form').addEventListener('submit', function(e) {
+    document.getElementById("team-form").addEventListener("submit", async function (e) {
       e.preventDefault();
+
+      // Aquí debes obtener el id real del capitán (usuario logueado)
+      // Por demo, se pone un valor fijo, reemplaza según tu autenticación
+      const capitanId = "0NqKJzQglbeuRlOIiy9y";
+
       const teamData = {
-        name: document.getElementById('team-name').value,
-        logo: document.getElementById('team-logo').value,
-        description: document.getElementById('team-description').value,
-        tournament: document.getElementById('team-tournament').value
+        nombre: document.getElementById("team-name").value,
+        logo: document.getElementById("team-logo").value,
+        descripcion: document.getElementById("team-description").value,
+        capitan: capitanId,
+        jugadores: []
       };
-      
-      // Aquí iría la llamada al backend
-      console.log('Datos del equipo:', teamData);
-      alert('Equipo creado exitosamente!');
-      window.location.href = 'ver-equipo.html?id=nuevo-id'; // Redirigir a vista de equipo
+
+      try {
+        const response = await fetch("http://localhost:3001/equipos", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(teamData),
+        });
+
+        if (!response.ok) {
+          throw new Error("Error al crear el equipo: " + response.statusText);
+        }
+
+        const result = await response.json();
+
+        alert("Equipo creado exitosamente! ID: " + result.id);
+       
+      } catch (error) {
+        alert("Error al crear equipo: " + error.message);
+      }
     });
-    
-    document.getElementById('cancel-team').addEventListener('click', function() {
-      if(confirm('¿Seguro que deseas cancelar? Los datos no se guardarán.')) {
+
+    document.getElementById("cancel-team").addEventListener("click", function () {
+      if (confirm("¿Seguro que deseas cancelar? Los datos no se guardarán.")) {
         window.history.back();
       }
     });
