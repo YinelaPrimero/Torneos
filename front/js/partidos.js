@@ -50,7 +50,7 @@ async function loadMatches() {
 loadMatches();
 
 // Create a new match
-document.getElementById('match-form').addEventListener('submit', async function(e) {
+matchForm.addEventListener('submit', async function(e) {
   e.preventDefault();
 
   const torneoId = document.getElementById('tournament-id-input').value.trim();
@@ -141,18 +141,22 @@ matchesList.addEventListener('click', async e => {
 
 // Open edit result modal
 async function openEditModal(id) {
-  console.log('Fetching match with ID:', id);
+  console.log('Intentando obtener partido con ID:', id);
   try {
     const res = await fetch(`http://localhost:3005/partidos/${id}`);
-    if (!res.ok) throw new Error('Partido no encontrado');
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Partido no encontrado: ${errorText} (Estado: ${res.status})`);
+    }
     const data = await res.json();
+    console.log('Datos del partido recibidos:', data);
     document.getElementById('edit-id').value = id;
-    document.getElementById('edit-goles-local').value = data.goles_local;
-    document.getElementById('edit-goles-visitante').value = data.goles_visitante;
+    document.getElementById('edit-goles-local').value = data.goles_local || 0;
+    document.getElementById('edit-goles-visitante').value = data.goles_visitante || 0;
     editResultModal.style.display = 'block';
   } catch (error) {
-    console.error('Error al cargar datos del partido:', error);
-    alert('Error al cargar datos del partido');
+    console.error('Error al cargar datos del partido:', error.message);
+    alert(`Error al cargar datos del partido: ${error.message}`);
   }
 }
 
@@ -177,24 +181,27 @@ editResultForm.addEventListener('submit', async e => {
     goles_local: golesLocal,
     goles_visitante: golesVisitante,
     resultado: `${golesLocal}-${golesVisitante}`,
-    estado: (golesLocal === 0 && golesVisitante === 0) ? 'Programado' : 'Finalizado'
+    estado: 'Finalizado' // Update status to "Finalizado" when result is updated
   };
 
   try {
-    const res = await fetch(`http://localhost:3005/partidos/${id}`, {
+    const res = await fetch(`http://localhost:3005/partidos/${id}/resultado`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updatedPartido)
     });
 
-    if (!res.ok) throw new Error('Error al actualizar resultado');
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Error al actualizar resultado: ${errorText}`);
+    }
 
     await loadMatches();
     editResultModal.style.display = 'none';
     alert('Resultado actualizado exitosamente');
   } catch (error) {
     console.error('Error al actualizar resultado:', error);
-    alert('Error al actualizar resultado');
+    alert('Error al actualizar resultado: ' + error.message);
   }
 });
 
