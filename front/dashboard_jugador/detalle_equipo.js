@@ -1,13 +1,14 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  const equipoId = 'rxHVhO3ObnzE8ERMJ7gF'; // Cambia esto por el id real
-
- const idUsuario = '0NqKJzQglbeuRlOIiy9y';  // Aquí pones el id del usuario (capitán)
+  const equipoId = 'rxHVhO3ObnzE8ERMJ7gF'; 
+ const idUsuario = '0NqKJzQglbeuRlOIiy9y';  
 
   // Elementos modal y formulario
   const modal = document.getElementById('edit-team-modal');
   const btnEditar = document.getElementById('edit-team');
   const btnCancelar = document.getElementById('cancel-edit');
   const formEditar = document.getElementById('edit-team-form');
+  const btnEliminar = document.getElementById('delete-team');
+
 
   // Función para abrir modal y cargar datos (igual)
   async function abrirModalEdicion() {
@@ -68,6 +69,33 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.getElementById('team-description').textContent = descripcion;
     } catch (error) {
       alert(error.message);
+    }
+  });
+  // Evento para eliminar equipo
+  btnEliminar.addEventListener('click', async () => {
+    if (!confirm('¿Estás seguro que quieres eliminar este equipo? Esta acción no se puede deshacer.')) {
+      return;
+    }
+
+    try {
+      // Enviar petición DELETE con body (idUsuario)
+      const res = await fetch(`http://localhost:3001/equipos/${equipoId}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idUsuario }),
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(errorText || 'Error al eliminar equipo');
+      }
+
+      alert('Equipo eliminado exitosamente');
+      // Redirigir a otra página (ejemplo: lista de equipos)
+      window.location.href = 'ver_equipo.html';
+
+    } catch (error) {
+      alert('No se pudo eliminar el equipo: ' + error.message);
     }
   });
 
