@@ -29,7 +29,7 @@
     
     <div class="main">
       <header class="main-header">
-        <h1>Bienvenido, <span id="player-name">Juan Pérez</span></h1>
+        <h1>Bienvenido, <span id="player-name">Cargando...</span></h1>
         <div class="user-menu">
           <img src="https://via.placeholder.com/40" alt="Foto de perfil" id="player-avatar">
           <div class="notifications">
@@ -43,26 +43,10 @@
         <div class="player-stats">
           <div class="player-card">
             <div class="player-avatar">
-              <img src="https://via.placeholder.com/100" alt="Foto de perfil">
+              <img src="https://via.placeholder.com/100" alt="Foto de perfil" id="player-photo">
             </div>
             <div class="player-info">
-              <h2 id="full-name">Juan Pérez</h2>
-              <p class="position"><i class="fas fa-tshirt"></i> <span id="player-position">Delantero</span></p>
-              <p class="team"><i class="fas fa-users"></i> <span id="player-team">Los Tigres</span></p>
-            </div>
-            <div class="player-numbers">
-              <div class="stat">
-                <h3>Goles</h3>
-                <p id="goals-count">8</p>
-              </div>
-              <div class="stat">
-                <h3>Partidos</h3>
-                <p id="matches-count">12</p>
-              </div>
-              <div class="stat">
-                <h3>Rating</h3>
-                <p id="player-rating">8.2</p>
-              </div>
+              <h2 id="full-name">Cargando...</h2>
             </div>
           </div>
         </div>
@@ -113,7 +97,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h3>Unirse a un Equipo</h3>
-        <button class="close-modal">&times;</button>
+        <button class="close-modal">×</button>
       </div>
       <div class="modal-body">
         <div class="form-group">
@@ -131,7 +115,65 @@
     </div>
   </div>
   
-  <script src="../js/auth.js"></script>
-  <script src="../js/jugador.js"></script>
+  <script>
+    const userId = localStorage.getItem('userId') || 'defaultUserId';
+
+    async function fetchUserData() {
+      if (!userId || userId === 'defaultUserId') {
+        console.error('Invalid userId:', userId);
+        alert('Error: No se encontró un ID de usuario válido. Por favor, inicie sesión nuevamente.');
+        localStorage.removeItem('userId');
+        window.location.href = '/front/login.html';
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:3003/api/usuarios/${userId}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (!response.ok) {
+          if (response.status === 404) {
+            console.error('Usuario no encontrado en la base de datos:', userId);
+            alert('Error: Usuario no encontrado. Por favor, inicie sesión nuevamente.');
+            localStorage.removeItem('userId');
+            window.location.href = '/front/login.html';
+            return;
+          }
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const user = await response.json();
+        if (!user || !user.nombre) {
+          throw new Error('Nombre de usuario no encontrado');
+        }
+
+        // Update the player's name in the header
+        document.getElementById('player-name').textContent = user.nombre;
+        // Update the full name in the player card
+        document.getElementById('full-name').textContent = user.nombre;
+        // Update the avatar in the header
+        if (user.foto) {
+          document.getElementById('player-avatar').src = user.foto;
+        }
+        // Update the photo in the player card
+        if (user.foto) {
+          document.getElementById('player-photo').src = user.foto;
+        }
+      } catch (error) {
+        console.error('Error al cargar los datos del usuario:', error);
+        alert('Error al cargar los datos del usuario: ' + error.message);
+      }
+    }
+
+    // Handle logout
+    document.querySelector('.sidebar a[href="../login.html"]').addEventListener('click', () => {
+      localStorage.removeItem('userId');
+      window.location.href = '../login.html';
+    });
+
+    window.onload = fetchUserData;
+  </script>
 </body>
 </html>

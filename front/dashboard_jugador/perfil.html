@@ -132,10 +132,7 @@
                                 <option value="Delantero">Delantero</option>
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label for="fecha-nacimiento" class="form-label">Fecha de nacimiento</label>
-                            <input type="date" class="form-control" id="fecha-nacimiento" value="">
-                        </div>
+                        
                         <div class="mb-3">
                             <label for="biografia" class="form-label">Biografía</label>
                             <textarea class="form-control" id="biografia" rows="3"></textarea>
@@ -173,10 +170,7 @@
                             <label id="contacto-emergencia" for="contacto-emergencia" class="form-label">Contacto de emergencia</label>
                             <input type="text" class="form-control" id="contacto-emergencia" value="">
                         </div>
-                        <div class="mb-3">
-                            <label for="alergias" class="form-label">Alergias</label>
-                            <textarea class="form-control" id="alergias" rows="3"></textarea>
-                        </div>
+                        
                         <div class="d-flex justify-content-between">
                             <button class="btn btn-secondary" onclick="resetMedicalForm()">Cancelar</button>
                             <button class="btn btn-primary" onclick="updateMedicalInfo()">Guardar</button>
@@ -241,17 +235,14 @@
             }
 
             document.getElementById('nombre').value = user.nombre || '';
-            
             document.getElementById('contacto').value = user.contacto || '';
             document.getElementById('password').value = ''; // Password field should be empty by default
             document.getElementById('posicion').value = user.posicion || 'Delantero';
-            document.getElementById('fecha-nacimiento').value = user.fecha_nacimiento || '';
             document.getElementById('biografia').value = user.descripcion || '';
-
             document.getElementById('tipo-sangre').value = user.tipo_sangre || 'A+';
             document.getElementById('eps').value = user.eps || '';
             document.getElementById('contacto-emergencia').value = user.contacto_emergencia || '';
-            document.getElementById('alergias').value = user.alergias || 'Ninguna conocida';
+            
         }
 
         async function resetProfileForm() {
@@ -268,7 +259,6 @@
                 nombre: document.getElementById('nombre').value,
                 contacto: document.getElementById('contacto').value,
                 posicion: document.getElementById('posicion').value,
-                fecha_nacimiento: document.getElementById('fecha-nacimiento').value,
                 descripcion: document.getElementById('biografia').value
             };
             if (password) {
@@ -299,7 +289,7 @@
                 tipo_sangre: document.getElementById('tipo-sangre').value,
                 eps: document.getElementById('eps').value,
                 contacto_emergencia: document.getElementById('contacto-emergencia').value,
-                alergias: document.getElementById('alergias').value
+                
             };
 
             try {
