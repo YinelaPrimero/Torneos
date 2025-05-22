@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import usuariosController from './controllers/usuariosController.js';
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
@@ -16,8 +17,9 @@ const app = express();
 const firebaseApp = initializeApp(firebaseConfig);
 export const db = getFirestore(firebaseApp);
 
+app.use(cors());
 app.use(express.json());
-app.use(usuariosController);
+app.use('/api', usuariosController);
 
 const PORT = 3003;
 app.listen(PORT, () => {
