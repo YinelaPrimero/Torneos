@@ -1,21 +1,18 @@
 import { Router } from 'express';
-import bcrypt from 'bcrypt';
-import { crearUsuario, consultarUsuarios, consultarUsuarioPorId, actualizarUsuario, eliminarUsuario, verificarContactoUnico } from '../models/usuariosModel.js';
+import { crearUsuario, consultarUsuarios, consultarUsuarioPorId, actualizarUsuario, eliminarUsuario, verificarEmailUnico } from '../models/usuariosModel.js';
 
 const router = Router();
-const SALT_ROUNDS = 10;
 
 router.post('/usuarios', async (req, res) => {
-    const { nombre, foto, edad, sexo_biologico, descripcion, posicion, goles, contacto, ubicacion, eps, tipo_sangre, contacto_emergencia, password, isAdmin } = req.body;
+    const { nombre, apellido, email, foto, edad, sexo_biologico, descripcion, posicion, goles, contacto, ubicacion, eps, tipo_sangre, contacto_emergencia, password, isAdmin, fecha_nacimiento, alergias, equipo } = req.body;
     try {
         if (!nombre || !contacto || !password) {
-            return res.status(400).send("Nombre, contacto y contraseña son obligatorios");
+            return res.status(400).send("Nombre, teléfono y contraseña son obligatorios");
         }
-        const contactoExiste = await verificarContactoUnico(contacto);
-        if (contactoExiste) {
-            return res.status(400).send("El contacto ya está registrado");
+        const emailExiste = await verificarEmailUnico(contacto); // Reusing emailUnico for contacto uniqueness
+        if (emailExiste) {
+            return res.status(400).send("El teléfono ya está registrado");
         }
-        const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
         const usuarios = await consultarUsuarios();
         let finalIsAdmin = false;
         if (usuarios.length === 0 && isAdmin === true) {
@@ -24,7 +21,7 @@ router.post('/usuarios', async (req, res) => {
             return res.status(403).send("Solo el primer usuario o un administrador existente puede establecer isAdmin: true");
         }
         await crearUsuario({ 
-            nombre, foto, edad, sexo_biologico, descripcion, posicion, goles, contacto, ubicacion, eps, tipo_sangre, contacto_emergencia, password: hashedPassword, isAdmin: finalIsAdmin 
+            nombre, apellido, email, foto, edad, sexo_biologico, descripcion, posicion, goles, contacto, ubicacion, eps, tipo_sangre, contacto_emergencia, password, isAdmin: finalIsAdmin, fecha_nacimiento, alergias, equipo 
         });
         res.status(201).send("Usuario creado");
     } catch (error) {
@@ -37,15 +34,14 @@ router.post('/login', async (req, res) => {
     const { contacto, password } = req.body;
     try {
         if (!contacto || !password) {
-            return res.status(400).send("Contacto y contraseña son obligatorios");
+            return res.status(400).send("Teléfono y contraseña son obligatorios");
         }
         const usuarios = await consultarUsuarios();
         const usuario = usuarios.find(u => u.contacto === contacto);
         if (!usuario) {
-            return res.status(401).send("Contacto no encontrado");
+            return res.status(401).send("Teléfono no encontrado");
         }
-        const match = await bcrypt.compare(password, usuario.password);
-        if (!match) {
+        if (password !== usuario.password) {
             return res.status(401).send("Contraseña incorrecta");
         }
         const { password: _, ...usuarioSinPassword } = usuario;
@@ -84,17 +80,16 @@ router.get('/usuarios/:id', async (req, res) => {
 
 router.put('/usuarios/:id', async (req, res) => {
     const { id } = req.params;
-    const { nombre, foto, edad, sexo_biologico, descripcion, posicion, goles, contacto, ubicacion, eps, tipo_sangre, contacto_emergencia, password } = req.body;
+    const { nombre, apellido, email, foto, edad, sexo_biologico, descripcion, posicion, goles, contacto, ubicacion, eps, tipo_sangre, contacto_emergencia, password, fecha_nacimiento, alergias, equipo } = req.body;
     try {
         if (contacto) {
-            const contactoExiste = await verificarContactoUnico(contacto, id);
+            const contactoExiste = await verificarEmailUnico(contacto, id); // Reusing emailUnico for contacto uniqueness
             if (contactoExiste) {
-                return res.status(400).send("El contacto ya está registrado");
+                return res.status(400).send("El teléfono ya está registrado");
             }
         }
-        const hashedPassword = password ? await bcrypt.hash(password, SALT_ROUNDS) : undefined;
         await actualizarUsuario(id, { 
-            nombre, foto, edad, sexo_biologico, descripcion, posicion, goles, contacto, ubicacion, eps, tipo_sangre, contacto_emergencia, password: hashedPassword 
+            nombre, apellido, email, foto, edad, sexo_biologico, descripcion, posicion, goles, contacto, ubicacion, eps, tipo_sangre, contacto_emergencia, password, fecha_nacimiento, alergias, equipo 
         });
         res.send("Usuario actualizado");
     } catch (error) {

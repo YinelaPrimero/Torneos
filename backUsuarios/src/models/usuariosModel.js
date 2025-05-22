@@ -5,6 +5,8 @@ async function crearUsuario(data) {
     try {
         const docRef = await addDoc(collection(db, "usuarios"), {
             nombre: data.nombre,
+            apellido: data.apellido || "",
+            email: data.email || "",
             foto: data.foto || "",
             edad: data.edad || null,
             sexo_biologico: data.sexo_biologico || null,
@@ -17,7 +19,10 @@ async function crearUsuario(data) {
             tipo_sangre: data.tipo_sangre || "",
             contacto_emergencia: data.contacto_emergencia || "",
             password: data.password || "",
-            isAdmin: data.isAdmin || false
+            isAdmin: data.isAdmin || false,
+            fecha_nacimiento: data.fecha_nacimiento || "",
+            alergias: data.alergias || "",
+            equipo: data.equipo || ""
         });
         console.log("El usuario fue creado con ID: ", docRef.id);
         return docRef.id;
@@ -31,7 +36,7 @@ async function consultarUsuarios() {
     try {
         const querySnapshot = await getDocs(collection(db, "usuarios"));
         const response = querySnapshot.docs.map(doc => ({
-            id: doc.id,
+            id: doc.id, // Ensure the Firebase document ID is used
             ...doc.data()
         }));
         return response;
@@ -60,6 +65,8 @@ async function actualizarUsuario(id, data) {
         const docRef = doc(db, "usuarios", id);
         const updateData = {};
         if (data.nombre !== undefined) updateData.nombre = data.nombre;
+        if (data.apellido !== undefined) updateData.apellido = data.apellido;
+        if (data.email !== undefined) updateData.email = data.email;
         if (data.foto !== undefined) updateData.foto = data.foto;
         if (data.edad !== undefined) updateData.edad = data.edad;
         if (data.sexo_biologico !== undefined) updateData.sexo_biologico = data.sexo_biologico;
@@ -73,6 +80,9 @@ async function actualizarUsuario(id, data) {
         if (data.contacto_emergencia !== undefined) updateData.contacto_emergencia = data.contacto_emergencia;
         if (data.password !== undefined) updateData.password = data.password;
         if (data.isAdmin !== undefined) updateData.isAdmin = data.isAdmin;
+        if (data.fecha_nacimiento !== undefined) updateData.fecha_nacimiento = data.fecha_nacimiento;
+        if (data.alergias !== undefined) updateData.alergias = data.alergias;
+        if (data.equipo !== undefined) updateData.equipo = data.equipo;
 
         await updateDoc(docRef, updateData);
         console.log("Usuario actualizado con ID: ", id);
@@ -93,9 +103,9 @@ async function eliminarUsuario(id) {
     }
 }
 
-async function verificarContactoUnico(contacto, excludeId = null) {
+async function verificarEmailUnico(email, excludeId = null) {
     try {
-        const q = query(collection(db, "usuarios"), where("contacto", "==", contacto));
+        const q = query(collection(db, "usuarios"), where("email", "==", email));
         const querySnapshot = await getDocs(q);
         if (querySnapshot.empty) {
             return false;
@@ -105,9 +115,9 @@ async function verificarContactoUnico(contacto, excludeId = null) {
         }
         return true;
     } catch (e) {
-        console.error("Error al verificar contacto único: ", e);
+        console.error("Error al verificar email único: ", e);
         throw e;
     }
 }
 
-export { crearUsuario, consultarUsuarios, consultarUsuarioPorId, actualizarUsuario, eliminarUsuario, verificarContactoUnico };
+export { crearUsuario, consultarUsuarios, consultarUsuarioPorId, actualizarUsuario, eliminarUsuario, verificarEmailUnico };
