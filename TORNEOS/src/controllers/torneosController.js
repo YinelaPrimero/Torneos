@@ -30,7 +30,7 @@ router.post('/torneos', verificarAdmin, async (req, res) => {
 router.put('/torneos/:id', verificarAdmin, async (req, res) => {
   try {
     await actualizarTorneo(req.params.id, req.body);
-    res.send("Torneo actualizado");
+    res.status(200).send("Torneo actualizado");
   } catch (error) {
     console.error(error);
     res.status(500).send("Error al actualizar el torneo");
