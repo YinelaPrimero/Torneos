@@ -39,10 +39,10 @@ router.get('/equipos/:id', async (req, res) => {
 
 router.put('/equipos/:id', async (req, res) => { 
     const id = req.params.id; 
-    const { nombre, cantidad_jugadores, idUsuario  } = req.body;
+    const { nombre, logo, descripcion, idUsuario  } = req.body;
 
     try {
-        await actualizarEquipo(id, nombre, cantidad_jugadores, idUsuario);
+        await actualizarEquipo(id, nombre, logo, descripcion, idUsuario);
         res.send("Equipo actualizado");
     } catch (error) {
         res.status(403).send(error.message || "Error actualizando equipo");

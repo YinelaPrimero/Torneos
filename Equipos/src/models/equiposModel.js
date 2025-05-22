@@ -52,7 +52,7 @@ async function consultarEquipo(id) {
     }
 }
 
-async function actualizarEquipo(idEquipo, nombre, idUsuario) {
+async function actualizarEquipo(idEquipo, nombre, logo, descripcion, idUsuario) {
   try {
     const equipoRef = doc(db, "equipos", idEquipo);
     const equipoSnap = await getDoc(equipoRef);
@@ -68,7 +68,7 @@ async function actualizarEquipo(idEquipo, nombre, idUsuario) {
       throw new Error("No autorizado: solo el capitán puede actualizar el equipo");
     }
 
-    await updateDoc(equipoRef, { nombre });
+    await updateDoc(equipoRef, { nombre, logo, descripcion });
 
     console.log("Equipo actualizado con ID: ", idEquipo);
 
