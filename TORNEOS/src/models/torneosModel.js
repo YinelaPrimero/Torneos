@@ -13,7 +13,6 @@ import {
 async function crearTorneo(data) {
   try {
     const docRef = await addDoc(collection(db, "torneos"), {
-      id: data.id,
       nombre: data.nombre,
       descripcion: data.descripcion,
       edad_minima: data.edad_minima,
@@ -26,8 +25,10 @@ async function crearTorneo(data) {
       clasificación: []
     });
     console.log("El torneo fue creado con ID: ", docRef.id);
+    return docRef.id;  // retorna el id correctamente
   } catch (e) {
     console.error("Error al crear el torneo", e);
+    throw e;  // lanza el error para que el controlador lo maneje
   }
 }
 
