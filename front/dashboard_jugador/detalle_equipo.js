@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <p>${solicitud.posicionJugador} • ${new Date(solicitud.fecha_solicitud || solicitud.date || '').toLocaleDateString()}</p>
           </div>
           <div class="request-actions">
-            <button class="btn btn-success btn-sm accept-request" data-id="${solicitud.id}">Aceptar</button>
+            <button class="btn btn-success btn-sm accept-request" data-id="${solicitud.id}" data-jugador="${solicitud.id_jugador}">Aceptar</button>
             <button class="btn btn-danger btn-sm reject-request" data-id="${solicitud.id}">Rechazar</button>
           </div>
         </div>
@@ -137,16 +137,27 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.querySelectorAll('.accept-request').forEach(btn => {
         btn.addEventListener('click', async () => {
           const idSolicitud = btn.getAttribute('data-id');
+          const idJugador = btn.getAttribute('data-jugador');
           if (!confirm('¿Aceptar esta solicitud?')) return;
 
           try {
-            const res = await fetch(`http://localhost:3001/solicitudes/${idSolicitud}`, {
-              method: 'PUT',
+            // 1. Actualizar estado solicitud a aceptada
+            //const res = await fetch(`http://localhost:3004/solicitudes/${idSolicitud}`, {
+            //  method: 'PUT',
+            //  headers: { 'Content-Type': 'application/json' },
+            //  body: JSON.stringify({ estado: 'aceptada' }),
+            //});
+            //if (!res.ok) throw new Error('Error al aceptar solicitud');
+
+            // 2. Agregar jugador al equipo
+            const resAddPlayer = await fetch(`http://localhost:3001/equipos/${equipoId}/jugadores`, {
+              method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ estado: 'aceptada' }),
+              body: JSON.stringify({ idJugador, idUsuario }),
             });
-            if (!res.ok) throw new Error('Error al aceptar solicitud');
-            alert('Solicitud aceptada');
+            if (!resAddPlayer.ok) throw new Error('Error al agregar jugador al equipo');
+
+            alert('Solicitud aceptada y jugador agregado al equipo');
             await cargarSolicitudesPendientes(id_equipo);
           } catch (error) {
             alert(error.message);
