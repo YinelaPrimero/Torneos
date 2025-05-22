@@ -67,3 +67,36 @@ async function obtenerEquipos() {
 
 // Ejecutar al cargar la página
 window.onload = obtenerEquipos;
+
+
+document.addEventListener('click', function (e) {
+  if (e.target.closest('.btn-edit')) {
+    const row = e.target.closest('tr');
+    const columns = row.querySelectorAll('td');
+
+    const torneoInfo = columns[0].textContent;
+    const [torneoNombre, torneoIdText] = torneoInfo.split(' (ID: ');
+    const torneoId = torneoIdText ? torneoIdText.replace(')', '') : '';
+
+    const equipoLocal = columns[1].textContent.trim();
+    const equipoVisitante = columns[2].textContent.trim();
+    const fechaHora = columns[3].textContent.trim();
+
+    // Formatear fecha y hora
+    const [fecha, hora] = fechaHora.split(', ')[1].split(' ');
+    const [dia, mes, año] = fechaHora.split(', ')[0].split('/');
+    const [horas, minutos] = hora.split(':');
+
+    // Rellenar el formulario
+    document.getElementById('tournament-id-input').value = torneoId.trim();
+    document.getElementById('tournament-name-input').value = torneoNombre.trim();
+    document.getElementById('local-team-input').value = equipoLocal;
+    document.getElementById('visitor-team-input').value = equipoVisitante;
+    document.getElementById('date-input').value = `${año}-${mes}-${dia}`;
+    document.getElementById('time-input').value = `${horas}:${minutos}`;
+
+    // Mostrar el modal
+    document.getElementById('toggle-modal').checked = true;
+    document.getElementById('match-modal').style.display = 'block';
+  }
+});

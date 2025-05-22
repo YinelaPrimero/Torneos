@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import partidoController from './controllers/partidoscontroler.js';  
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
@@ -16,7 +17,7 @@ const app = express();
 const firebaseApp = initializeApp(firebaseConfig);
 export const db = getFirestore(firebaseApp);
 
-
+app.use(cors());
 app.use(express.json());
 
 app.use(partidoController);
