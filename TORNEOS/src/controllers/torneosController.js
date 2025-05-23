@@ -10,8 +10,8 @@ import {
 } from '../models/torneosModel.js';
 
 import { verificarAdmin } from '../middlewares/verificarAdmin.js';
-
 import axios from 'axios';
+
 
 const router = Router();
 
@@ -114,15 +114,29 @@ router.post('/torneos/:id/equipos', async (req, res) => {
 
 
 // Consultar equipos inscritos en un torneo (sin validación admin)
+
+
 router.get('/torneos/:id/equipos', async (req, res) => {
   try {
-    const equipos = await consultarEquiposInscritos(req.params.id);
-    res.json(equipos);
+    const equiposIds = await consultarEquiposInscritos(req.params.id);
+
+    const equiposCompletos = await Promise.all(
+      equiposIds.map(async (equipoId) => {
+        const response = await axios.get(`http://localhost:3001/equipos/${equipoId}`);
+        return { ...response.data, _id: equipoId }; // <-- aquí tendrás nombre!!!
+      })
+    );
+    console.log('Respuesta a enviar desde /torneos/:id/equipos:', equiposCompletos);
+    res.json(equiposCompletos);
   } catch (error) {
     console.error(error);
     res.status(500).send("Error al consultar equipos inscritos");
   }
 });
+
+
+
+
 
 export default router;
 
