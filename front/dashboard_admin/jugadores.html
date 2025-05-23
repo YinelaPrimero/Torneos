@@ -3,64 +3,212 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jugadores - Admin</title>
+  <title>FootAdmin - Gestión de Jugadores</title>
   <link rel="stylesheet" href="../css/styles.css">
-  <link rel="stylesheet" href="../css/admin.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 250px;
+      background-color: #008f39;
+      color: white;
+      padding: 20px 0;
+    }
+    .sidebar .logo {
+      font-size: 1.5em;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar ul li {
+      padding: 10px 20px;
+    }
+    .sidebar ul li.active, .sidebar ul li:hover {
+      background-color: #01a743;
+    }
+    .sidebar ul li a {
+      color: white;
+      text-decoration: none;
+    }
+    .sidebar .footer {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+    }
+    .main {
+      flex: 1;
+      padding: 20px;
+    }
+    .main-header h1 {
+      margin: 0;
+    }
+    .player-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    .player-table th, .player-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    .player-table th {
+      background-color: #008f39;
+      color: white;
+    }
+    .player-table td img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .player-table .actions button {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .player-table .actions button:hover {
+      background-color: #c82333;
+    }
+    .export-btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+    .export-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <nav class="sidebar">
       <div class="logo">FootAdmin</div>
       <ul>
-        <li><i class="fas fa-home"></i> <a href="dashboard_admin.html">Inicio</a></li>
-        <li class="active"><i class="fas fa-trophy"></i> <a href="torneos.html">Torneos</a></li>
+        <li class="active"><i class="fas fa-home"></i> <a href="dashboard_admin.html">Inicio</a></li>
+        <li><i class="fas fa-trophy"></i> <a href="torneos.html">Torneos</a></li>
         <li><i class="fas fa-users"></i> <a href="equipos.html">Equipos</a></li>
         <li><i class="fas fa-user"></i> <a href="jugadores.html">Jugadores</a></li>
-        <li><i class="fas fa-calendar-alt"></i> <a href="partidos.html">Partidos</a></li>
+        <li><i class="fas fa-futbol"></i> <a href="partidos.html">Partidos</a></li>
         <li><i class="fas fa-cog"></i> <a href="#">Configuración</a></li>
       </ul>
-      <div class="footer">© 2025 FootAdmin</div>
+      <!-- <div class="footer">© 2025 FootAdmin</div> -->
     </nav>
+    
+    <div class="main">
       <header class="main-header">
         <h1>Gestión de Jugadores</h1>
-        <div class="header-actions">
-          <input type="text" placeholder="Buscar jugador..." class="form-control">
-          <button class="btn btn-primary">Exportar</button>
-        </div>
+        <button class="export-btn" onclick="exportToCSV()">Exportar</button>
       </header>
       
       <section class="content">
-        <div class="card">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Foto</th>
-                <th>Nombre</th>
-                <th>Equipo</th>
-                <th>Posición</th>
-                <th>Goles</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Ejemplo de datos -->
-              <tr>
-                <td><img src="https://via.placeholder.com/40" class="player-avatar"></td>
-                <td>Juan Pérez</td>
-                <td>Los Tigres</td>
-                <td>Delantero</td>
-                <td>8</td>
-                <td>
-                  <button class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
-                  <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <table class="player-table" id="player-table">
+          <thead>
+            <tr>
+              <th>Foto</th>
+              <th>Nombre</th>
+              <th>Equipo</th>
+              <th>Posición</th>
+              <th>Goles</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="player-table-body">
+            <!-- JS will populate this -->
+          </tbody>
+        </table>
       </section>
     </div>
   </div>
+
+  <script>
+    async function fetchUsers() {
+      try {
+        const response = await fetch('http://localhost:3003/usuarios', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const users = await response.json();
+        const tableBody = document.getElementById('player-table-body');
+        tableBody.innerHTML = ''; // Clear existing rows
+
+        users.forEach(user => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td><img src="${user.foto || 'https://via.placeholder.com/40'}" alt="Foto de ${user.nombre}"></td>
+            <td>${user.nombre || 'Sin nombre'}</td>
+            <td>${user.equipo || 'Sin equipo'}</td>
+            <td>${user.posicion || 'Sin posición'}</td>
+            <td>${user.goles || 0}</td>
+            <td class="actions"><button onclick="deleteUser('${user.id}')">Eliminar</button></td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } catch (error) {
+        console.error('Error al cargar los usuarios:', error);
+        alert('Error al cargar los usuarios: ' + error.message);
+      }
+    }
+
+    async function deleteUser(userId) {
+      if (confirm('¿Estás seguro de que deseas eliminar a este jugador?')) {
+        try {
+          const response = await fetch(`http://localhost:3003/usuarios/${userId}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+
+          alert('Jugador eliminado con éxito');
+          fetchUsers(); // Refresh the table
+        } catch (error) {
+          console.error('Error al eliminar el usuario:', error);
+          alert('Error al eliminar el usuario: ' + error.message);
+        }
+      }
+    }
+
+    function exportToCSV() {
+      // Simple export logic (can be enhanced)
+      let csv = 'Foto,Nombre,Equipo,Posición,Goles\n';
+      fetchUsers().then(() => {
+        const rows = document.querySelectorAll('#player-table-body tr');
+        rows.forEach(row => {
+          const cols = row.querySelectorAll('td');
+          csv += `${cols[0].querySelector('img').src},${cols[1].textContent},${cols[2].textContent},${cols[3].textContent},${cols[4].textContent}\n`;
+        });
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'jugadores.csv';
+        a.click();
+      });
+    }
+
+    window.onload = fetchUsers;
+  </script>
 </body>
 </html>

@@ -80,13 +80,12 @@
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" href="/front/dashboard_jugador/dashboard_jugador.html">Inicio</a></li>
                     <li class="nav-item"><a class="nav-link active" href="/front/dashboard_jugador/perfil.html">Mi Perfil</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Mi Equipo</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Torneos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Estadísticas</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Crear Equipo</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Ver equipos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Unirse a equipo</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Configuración</a></li>
+                    <li class="nav-item"><a class="nav-link" href="equipo.html">Mi Equipo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="torneos.html">Torneos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="estadisticas.html">Estadísticas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="crear_equipo.html">Crear Equipo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ver_equipo.html">Ver equipo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="unirse_equipo.html">Unirse a equipo</a></li>
                     <li class="nav-item"><a class="nav-link" href="/front/login.html" id="logout">Cerrar Sesión</a></li>
                 </ul>
             </div>
@@ -95,9 +94,9 @@
 
     <div class="container">
         <div class="profile-header">
-            <img src="https://via.placeholder.com/150" class="profile-pic" alt="Foto de perfil" id="profile-pic">
+            <img src="https://thispersondoesnotexist.com/" class="profile-pic" alt="Foto de perfil" id="profile-pic">
             <div>
-                <button class="btn btn-primary btn-sm" onclick="document.getElementById('photo-input').click()">Cambiar foto</button>
+                <!-- <button class="btn btn-primary btn-sm" onclick="document.getElementById('photo-input').click()">Cambiar foto</button> -->
                 <input type="file" id="photo-input" style="display: none;" accept="image/*">
             </div>
             <h2 id="user-name">Juan Pérez</h2>
@@ -110,6 +109,10 @@
                 <div class="card">
                     <div class="card-header">Editar Perfil</div>
                     <div class="card-body">
+                        <div class="mb-3">
+                            <label for="foto" class="form-label">Foto</label>
+                            <input type="url" class="form-control" id="foto" value="">
+                        </div>
                         <div class="mb-3">
                             <label for="nombre" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="nombre" value="">
@@ -131,14 +134,14 @@
                             <label for="fecha-nacimiento" class="form-label">Fecha de nacimiento</label>
                             <input type="date" class="form-control" id="fecha-nacimiento" value="">
                         </div>
-                        <!-- <div class="mb-3">
+                        <div class="mb-3">
                             <label for="sexo-biologico" class="form-label">Sexo Biológico</label>
                             <select class="form-select" id="sexo-biologico">
-                                <option value="Portero">Hombre</option>
-                                <option value="Defensa">Mujer</option>
+                                <option value="Hombre">Hombre</option>
+                                <option value="Mujer">Mujer</option>
                                 <option value="Otro">Otro</option>
                             </select>
-                        </div> -->
+                        </div>
                         <div class="mb-3">
                             <label for="posicion" class="form-label">Posición</label>
                             <select class="form-select" id="posicion">
@@ -260,6 +263,8 @@
             document.getElementById('eps').value = user.eps || '';
             document.getElementById('contacto-emergencia').value = user.contacto_emergencia || '';
             document.getElementById('fecha-nacimiento').value = user.fecha_nacimiento || '';
+            document.getElementById('sexo-biologico').value = user.sexo_biologico || '';
+            document.getElementById('foto').value = user.foto || '';
             
             
         }
@@ -281,7 +286,8 @@
                 edad: document.getElementById('edad').value,
                 descripcion: document.getElementById('biografia').value,
                 fecha_nacimiento: document.getElementById('fecha-nacimiento').value,
-                // sexo_biologico: document.getElementById('sexo-biologico').value,
+                sexo_biologico: document.getElementById('sexo-biologico').value,
+                foto: document.getElementById('foto').value,
             };
             if (password) {
                 updatedData.password = password;
