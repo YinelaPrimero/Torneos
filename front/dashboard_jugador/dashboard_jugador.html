@@ -128,7 +128,7 @@
       }
 
       try {
-        const response = await fetch(`http://localhost:3003/api/usuarios/${userId}`, {
+        const response = await fetch(`http://localhost:3003/usuarios/${userId}`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' }
         });

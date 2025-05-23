@@ -20,6 +20,12 @@ export const db = getFirestore(firebaseApp);
 app.use(cors());
 app.use(express.json());
 
+app.use(cors({
+  origin: ['http://127.0.0.1:5500', 'http://localhost:5500'], // Orígenes permitidos
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
+
 app.use(partidoController);
 
 const PORT = 3005;

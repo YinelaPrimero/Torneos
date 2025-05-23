@@ -38,7 +38,7 @@ router.put('/torneos/:id', verificarAdmin, async (req, res) => {
 });
 
 // Consultar un torneo por ID (solo admin)
-router.get('/torneos/:id', verificarAdmin, async (req, res) => {
+router.get('/torneos/:id',  async (req, res) => {
   try {
     const result = await consultarTorneo(req.params.id);
     if (!result) return res.status(404).send("Torneo no encontrado");
@@ -50,7 +50,7 @@ router.get('/torneos/:id', verificarAdmin, async (req, res) => {
 });
 
 // Consultar todos los torneos (solo admin)
-router.get('/torneos', verificarAdmin, async (req, res) => {
+router.get('/torneos',  async (req, res) => {
   try {
     const result = await consultarTorneos();
     res.json(result);

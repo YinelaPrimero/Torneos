@@ -51,7 +51,7 @@
             }
 
             try {
-                const response = await fetch('http://localhost:3003/api/usuarios', {
+                const response = await fetch('http://localhost:3003/usuarios', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ nombre, contacto, password })

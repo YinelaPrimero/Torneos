@@ -79,19 +79,18 @@ router.put('/partidos/:id/estado', async (req, res) => {
 });
 
 // Ruta para obtener partidos por torneo con token en headers
-router.get('/partidos/torneos/:id', async (req, res) => {
-  const idTorneo = req.params.id;
-  const authHeader = req.headers.authorization;  // Obtener token del header
 
+
+router.get('/partidos/torneos/:id/equipos', async (req, res) => {
   try {
-    // Pasamos idTorneo y el token al modelo para que lo use en axios
-    const resultado = await consultarPartidosPorTorneo(idTorneo, authHeader);
-    res.json(resultado);
+    const equipos = await consultarPartidosPorTorneo(req.params.id);
+    res.json(equipos);
   } catch (error) {
-    console.error('Error al obtener torneo o partidos:', error.message || error);
-    res.status(500).json({ error: 'Error al obtener torneo o partidos' });
+    console.error(error.message);
+    res.status(500).send("Error al consultar equipos inscritos desde el microservicio de torneos");
   }
 });
+
 
 
 

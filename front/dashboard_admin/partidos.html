@@ -73,73 +73,55 @@
 
   <!-- Modal para crear partido -->
   <input type="checkbox" id="toggle-modal" class="modal-toggle" hidden />
-  <div class="modal" id="match-modal">
-    <div class="modal-content">
-      <h3>Crear Partido</h3>
-      <form id="match-form">
-        <div class="form-row">
-          <div class="form-group" style="flex: 1; margin-right: 10px;">
-            <label>ID del Torneo</label>
-            <input
-              type="text"
-              id="tournament-id-input"
-              class="form-control"
-              placeholder="Ej: 1"
-              required
-            />
-          </div>
-          <div class="form-group" style="flex: 3;">
-            <label>Nombre del Torneo</label>
-            <input
-              type="text"
-              id="tournament-name-input"
-              class="form-control"
-              placeholder="Ej: Torneo de Verano"
-              required
-            />
-          </div>
+  <!-- Modal para crear partido -->
+<input type="checkbox" id="toggle-modal" class="modal-toggle" hidden />
+<div class="modal" id="match-modal">
+  <div class="modal-content">
+    <h3>Crear Partido</h3>
+    <form id="match-form">
+      <div class="form-group">
+        <label for="tournament-select">Torneo</label>
+        <select id="tournament-select" class="form-control" required>
+          <option value="">Selecciona un torneo</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group" style="flex: 1; margin-right: 10px;">
+          <label>Equipo Local</label>
+          <select id="local-team-select" class="form-control" required>
+            <option value="">Selecciona equipo local</option>
+          </select>
         </div>
-        <div class="form-row">
-          <div class="form-group" style="flex: 1; margin-right: 10px;">
-            <label>Equipo Local</label>
-            <input
-              type="text"
-              id="local-team-input"
-              class="form-control"
-              placeholder="Ej: Los Tigres"
-              required
-            />
-          </div>
-          <div class="form-group" style="flex: 1;">
-            <label>Equipo Visitante</label>
-            <input
-              type="text"
-              id="visitor-team-input"
-              class="form-control"
-              placeholder="Ej: Águilas FC"
-              required
-            />
-          </div>
+        <div class="form-group" style="flex: 1;">
+          <label>Equipo Visitante</label>
+          <select id="visitor-team-select" class="form-control" required>
+            <option value="">Selecciona equipo visitante</option>
+          </select>
         </div>
-        <div class="form-row">
-          <div class="form-group" style="flex: 1; margin-right: 10px;">
-            <label>Fecha</label>
-            <input type="date" id="date-input" class="form-control" required />
-          </div>
-          <div class="form-group" style="flex: 1;">
-            <label>Hora</label>
-            <input type="time" id="time-input" class="form-control" required />
-          </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group" style="flex: 1; margin-right: 10px;">
+          <label>Fecha</label>
+          <input type="date" id="date-input" class="form-control" required />
         </div>
-        <div class="form-actions">
-          <label for="toggle-modal" class="btn btn-secondary" style="cursor:pointer;">
-            Cancelar
-          </label>
-          <button type="submit" class="btn btn-primary">Guardar</button>
+        <div class="form-group" style="flex: 1;">
+          <label>Hora</label>
+          <input type="time" id="time-input" class="form-control" required />
         </div>
-      </form>
-    </div>
+      </div>
+
+      <div class="form-actions">
+        <label for="toggle-modal" class="btn btn-secondary" style="cursor:pointer;">
+          Cancelar
+        </label>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </div>
+    </form>
   </div>
+</div>
+
 
   <!-- Modal editar resultado -->
   <div class="modal" id="edit-result-modal" style="display: none;">

@@ -124,6 +124,22 @@
                             <input type="password" class="form-control" id="password" value="">
                         </div>
                         <div class="mb-3">
+                            <label for="edad" class="form-label">Edad</label>
+                            <input type="number" class="form-control" id="edad" value="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="fecha-nacimiento" class="form-label">Fecha de nacimiento</label>
+                            <input type="date" class="form-control" id="fecha-nacimiento" value="">
+                        </div>
+                        <!-- <div class="mb-3">
+                            <label for="sexo-biologico" class="form-label">Sexo Biológico</label>
+                            <select class="form-select" id="sexo-biologico">
+                                <option value="Portero">Hombre</option>
+                                <option value="Defensa">Mujer</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </div> -->
+                        <div class="mb-3">
                             <label for="posicion" class="form-label">Posición</label>
                             <select class="form-select" id="posicion">
                                 <option value="Portero">Portero</option>
@@ -199,7 +215,7 @@
             }
 
             try {
-                const response = await fetch(`http://localhost:3003/api/usuarios/${userId}`, {
+                const response = await fetch(`http://localhost:3003/usuarios/${userId}`, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' }
                 });
@@ -237,11 +253,14 @@
             document.getElementById('nombre').value = user.nombre || '';
             document.getElementById('contacto').value = user.contacto || '';
             document.getElementById('password').value = ''; // Password field should be empty by default
-            document.getElementById('posicion').value = user.posicion || 'Delantero';
+            document.getElementById('edad').value = user.edad || ''; // Password field should be empty by default
+            document.getElementById('posicion').value = user.posicion || '';
             document.getElementById('biografia').value = user.descripcion || '';
-            document.getElementById('tipo-sangre').value = user.tipo_sangre || 'A+';
+            document.getElementById('tipo-sangre').value = user.tipo_sangre || '';
             document.getElementById('eps').value = user.eps || '';
             document.getElementById('contacto-emergencia').value = user.contacto_emergencia || '';
+            document.getElementById('fecha-nacimiento').value = user.fecha_nacimiento || '';
+            
             
         }
 
@@ -259,14 +278,17 @@
                 nombre: document.getElementById('nombre').value,
                 contacto: document.getElementById('contacto').value,
                 posicion: document.getElementById('posicion').value,
-                descripcion: document.getElementById('biografia').value
+                edad: document.getElementById('edad').value,
+                descripcion: document.getElementById('biografia').value,
+                fecha_nacimiento: document.getElementById('fecha-nacimiento').value,
+                // sexo_biologico: document.getElementById('sexo-biologico').value,
             };
             if (password) {
                 updatedData.password = password;
             }
 
             try {
-                const response = await fetch(`http://localhost:3003/api/usuarios/${userId}`, {
+                const response = await fetch(`http://localhost:3003/usuarios/${userId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(updatedData)
@@ -293,7 +315,7 @@
             };
 
             try {
-                const response = await fetch(`http://localhost:3003/api/usuarios/${userId}`, {
+                const response = await fetch(`http://localhost:3003/usuarios/${userId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(updatedData)
@@ -318,7 +340,7 @@
                 reader.onload = async (e) => {
                     const photoData = e.target.result;
                     try {
-                        const response = await fetch(`http://localhost:3003/api/usuarios/${userId}`, {
+                        const response = await fetch(`http://localhost:3003/usuarios/${userId}`, {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ foto: photoData })
