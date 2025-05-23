@@ -71,8 +71,7 @@
     </div>
   </div>
 
-  <!-- Modal para crear partido -->
-  <input type="checkbox" id="toggle-modal" class="modal-toggle" hidden />
+  
   <!-- Modal para crear partido -->
 <input type="checkbox" id="toggle-modal" class="modal-toggle" hidden />
 <div class="modal" id="match-modal">
@@ -125,34 +124,41 @@
 
   <!-- Modal editar resultado -->
   <div class="modal" id="edit-result-modal" style="display: none;">
-    <div class="modal-content">
-      <h3>Editar Resultado</h3>
-      <form id="edit-result-form">
-        <input type="hidden" id="edit-id" />
-        <div class="form-row">
-          <div class="form-group">
-            <label>Goles Local</label>
-            <input type="number" id="edit-goles-local" class="form-control" required />
-          </div>
-          <div class="form-group">
-            <label>Goles Visitante</label>
-            <input
-              type="number"
-              id="edit-goles-visitante"
-              class="form-control"
-              required
-            />
-          </div>
+  <div class="modal-content">
+    <h3>Editar Resultado</h3>
+    <form id="edit-result-form">
+      <input type="hidden" id="edit-id" />
+      <div class="form-row">
+        <div class="form-group">
+          <label>Goles Local</label>
+          <input type="number" id="edit-goles-local" class="form-control" required />
         </div>
-        <div class="form-actions">
-          <button type="button" class="btn btn-secondary" id="cancel-edit">
-            Cancelar
-          </button>
-          <button type="submit" class="btn btn-primary">Actualizar</button>
+        <div class="form-group">
+          <label>Goles Visitante</label>
+          <input type="number" id="edit-goles-visitante" class="form-control" required />
         </div>
-      </form>
-    </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Estado</label>
+          <select id="edit-estado" class="form-control" required>
+            <option value="Programado">Programado</option>
+            <option value="En juego">En juego</option>
+            <option value="Aplazado">Aplazado</option>
+            <option value="Suspendido">Suspendido</option>
+            <option value="Finalizado">Finalizado</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" id="cancel-edit">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary">Actualizar</button>
+      </div>
+    </form>
   </div>
+</div>
 
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
