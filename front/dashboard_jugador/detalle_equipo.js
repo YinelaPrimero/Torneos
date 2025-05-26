@@ -1,6 +1,39 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  const equipoId = 'rxHVhO3ObnzE8ERMJ7gF';  // Cambia por id dinámico real
-  const idUsuario = '0NqKJzQglbeuRlOIiy9y'; // ID del usuario logueado (capitán)
+ 
+  const userId = localStorage.getItem("userId");
+  const idUsuario = userId;
+
+  async function obtenerEquipoPorUsuario(idUsuario) {
+    try {
+      const response = await fetch(`http://localhost:3001/equipos/usuario/${idUsuario}`);
+
+      if (!response.ok) {
+        throw new Error("Error al consultar equipo");
+      }
+
+      const equipo = await response.json();
+
+      if (equipo && equipo.id) {
+        console.log("Equipo al que pertenece el usuario:", equipo.id);
+        return equipo.id; // Retorna el id del equipo
+      } else {
+        console.log("El usuario no pertenece a ningún equipo.");
+        return null;
+      }
+
+    } catch (error) {
+      console.error("Error obteniendo el equipo del usuario:", error);
+      return null;
+    }
+  }
+
+  // Esperas el resultado aquí
+  const equipoId = await obtenerEquipoPorUsuario(userId);
+  console.log("equipoId disponible para usar:", equipoId);
+
+  if (equipoId) {
+    // Aquí puedes seguir con la lógica que dependa de equipoId
+  }
 
   // Elementos DOM
   const modal = document.getElementById('edit-team-modal');
