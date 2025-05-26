@@ -206,4 +206,26 @@ async function obtenerEdadesJugadores(idEquipo) {
   }
 }
 
-export {crearEquipo, consultarEquipos, consultarEquipo, actualizarEquipo, eliminarEquipo, agregarJugador, eliminarJugador, consultarJugadores, obtenerEdadesJugadores}; 
+async function obtenerEquipoPorUsuario(idUsuario) {
+  try {
+    const querySnapshot = await getDocs(collection(db, "equipos"));
+
+    for (const docSnap of querySnapshot.docs) {
+      const equipo = docSnap.data();
+
+      // Verifica si es el capitán o está en el array de jugadores
+      if (equipo.capitan === idUsuario || (equipo.jugadores || []).includes(idUsuario)) {
+        return { id: docSnap.id, ...equipo };
+      }
+    }
+
+    // Si no se encontró ningún equipo
+    return null;
+
+  } catch (e) {
+    console.error("Error al buscar equipo por usuario:", e);
+    throw e;
+  }
+}
+
+export {obtenerEquipoPorUsuario, crearEquipo, consultarEquipos, consultarEquipo, actualizarEquipo, eliminarEquipo, agregarJugador, eliminarJugador, consultarJugadores, obtenerEdadesJugadores}; 
