@@ -228,6 +228,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!equipoRes.ok) throw new Error('Error al obtener datos del equipo');
     const equipo = await equipoRes.json();
 
+    // Comprobar si el usuario es el capitán
+    const esCapitan = equipo.capitan === idUsuario;
+
+    // Mostrar u ocultar la sección de solicitudes pendientes
+    if (esCapitan) {
+      requestsSection.style.display = 'block';
+      await cargarSolicitudesPendientes(equipoId);
+    } else {
+      requestsSection.style.display = 'none';
+    }
+
     let nombreCapitan = 'Desconocido';
     if (equipo.capitan) {
       try {
@@ -279,7 +290,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const playersGrid = document.getElementById('team-players');
     playersGrid.innerHTML = jugadoresDetalles.map(player => `
       <div class="player-card ${player.isCaptain ? 'captain' : ''}">
-        <img src="${player.avatar}" alt="${player.name}" class="player-avatar" />
         <h3>${player.name} ${player.isCaptain ? '👑' : ''}</h3>
         <p>${player.position}</p>
         ${(equipo.isCaptain && !player.isCaptain) ? 
@@ -288,8 +298,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     `).join('');
 
     // Mostrar siempre solicitudes
-    requestsSection.style.display = 'block';
-    await cargarSolicitudesPendientes(equipoId);
+    //requestsSection.style.display = 'block';
+    //await cargarSolicitudesPendientes(equipoId);
 
   } catch (error) {
     console.error('Error cargando datos del equipo:', error);
