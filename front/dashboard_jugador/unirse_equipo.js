@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const teamsList = document.getElementById('available-teams');
 
   // Simula el ID del jugador logueado, reemplaza con el real de tu sistema
-  const jugadorId = 'KtQK3JfEuEStQGS5sB2Q';
+    const userId = localStorage.getItem("userId");
+  const jugadorId = userId;
 
   try {
     const response = await fetch('http://localhost:3001/equipos');
@@ -52,8 +53,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const res = await fetch('http://localhost:3004/solicitudes', { 
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            id: '',           
+          body: JSON.stringify({ 
+            id: 'aq3242424',
             id_jugador: jugadorId,
             id_equipo: equipoId,
             estado: 'pendiente'

@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  const equipoId = 'rxHVhO3ObnzE8ERMJ7gF';  // Cambia por id dinámico real
-  const idUsuario = '0NqKJzQglbeuRlOIiy9y'; // ID del usuario logueado (capitán)
+  const equipoId = 'XlOZRhVuwfgXNxlS0l3A';  // Cambia por id dinámico real
+  const userId = localStorage.getItem("userId");
+  const idUsuario = userId;
 
   // Elementos DOM
   const modal = document.getElementById('edit-team-modal');
@@ -142,12 +143,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
           try {
             // 1. Actualizar estado solicitud a aceptada
-            //const res = await fetch(`http://localhost:3004/solicitudes/${idSolicitud}`, {
-            //  method: 'PUT',
-            //  headers: { 'Content-Type': 'application/json' },
-            //  body: JSON.stringify({ estado: 'aceptada' }),
-            //});
-            //if (!res.ok) throw new Error('Error al aceptar solicitud');
+            const res = await fetch(`http://localhost:3004/solicitudes/${idSolicitud}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ estado: 'aceptada' }),
+            });
+            if (!res.ok) throw new Error('Error al aceptar solicitud');
 
             // 2. Agregar jugador al equipo
             const resAddPlayer = await fetch(`http://localhost:3001/equipos/${equipoId}/jugadores`, {

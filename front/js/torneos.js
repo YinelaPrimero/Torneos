@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
   const tournamentsTable = document.getElementById('tournaments-table');
-  const UserId = 'rIRrGag3w3mqgb1vrrqB'; // Cambia por el userId admin real
+  const userIdLo = localStorage.getItem("userId");
+  const  UserId= userIdLo;
+
   let tournaments = [];
 
   // Cargar torneos desde backend

@@ -5,11 +5,12 @@ import { db } from "../index.js";
 async function crearSolicitud(id, id_jugador, id_equipo, estado) {
   try {
     const docRef = await addDoc(collection(db, "solicitudes"), {
-      id: id,
       id_jugador: id_jugador,
       id_equipo: id_equipo,
       estado: estado
     });
+
+     await updateDoc(docRef, { id: docRef.id });
     console.log("Solicitud creada con ID:", docRef.id);
   } catch (e) {
     console.error("Error al crear la solicitud:", e);
