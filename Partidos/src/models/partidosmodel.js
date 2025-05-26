@@ -21,7 +21,7 @@ async function crearPartido(partido) {
   }
 }
 
-// Consultar partido por ID lógico (campo 'id')
+// Consultar partido por ID lÃ³gico (campo 'id')
 async function consultarPartidoPorId(idBuscado) {
   try {
     const q = query(collection(db, 'Partidos'), where('id', '==', idBuscado));
@@ -78,32 +78,25 @@ async function actualizarEstadoPartido(idBuscado, estado) {
 }
 
 // Consultar partidos por torneo
+// Consultar partidos por torneo (y equipos inscritos)
+
+
+// Consultar equipos inscritos desde microservicio de torneos
+
+
 async function consultarPartidosPorTorneo(idTorneo) {
   try {
-    const q = query(collection(db, 'Partidos'), where('torneo', '==', idTorneo));
-    const snapshot = await getDocs(q);
-    const partidos = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-
-    let torneoInfo = null;
-    try {
-      const response = await axios.get(`http://localhost:3002/torneos/${idTorneo}`);
-      torneoInfo = response.data;
-    } catch (e) {
-      console.warn('No se pudo obtener info del torneo en el microservicio 3002');
-    }
-
-    return {
-      torneo: torneoInfo,
-      partidos,
-    };
-  } catch (e) {
-    console.error('Error al consultar partidos por torneo:', e);
-    throw e;
+    const response = await axios.get(`http://localhost:3002/torneos/${idTorneo}/equipos`);
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener equipos inscritos:', error.message);
+    throw new Error('No se pudieron obtener los equipos inscritos');
   }
 }
+
+
+
+
 
 export {
   crearPartido,

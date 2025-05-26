@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Partidos - Usuario</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/admin.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+  />
+  <style>
+    .filters {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .form-group {
+      display: flex;
+      align-items: center;
+    }
+    .form-group input {
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="logo">FootUser</div>
+      <ul>
+        <li class="active"><i class="fas fa-home"></i> <a href="dashboard_user.html">Inicio</a></li>
+        <li><i class="fas fa-trophy"></i> <a href="torneos.html">Torneos</a></li>
+        <li><i class="fas fa-calendar-alt"></i> <a href="partidos.html">Partidos</a></li>
+      </ul>
+    </nav>
+
+    <div class="main">
+      <header class="main-header">
+        <h1>Partidos de la Temporada</h1>
+      </header>
+
+      <section class="content">
+        <div class="card">
+          <div class="card-header">
+            <h2>Opciones de Visualización</h2>
+            <div class="filters">
+              <button class="btn btn-primary" id="show-all-matches">Mostrar Todos</button>
+
+              <div class="form-group">
+                <input type="text" id="match-id-input" class="form-control" placeholder="ID del Partido" />
+                <button class="btn btn-secondary" id="filter-by-id">Confirmar</button>
+              </div>
+
+              
+            </div>
+          </div>
+
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Torneo</th>
+                <th>Local</th>
+                <th>Visitante</th>
+                <th>Fecha/Hora</th>
+                <th>Resultado</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="matches-list"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Tu script JS -->
+  <script src="../js/partidosjugador.js"></script>
+</body>
+</html>

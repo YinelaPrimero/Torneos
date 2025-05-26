@@ -1,187 +1,378 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi Perfil - Torneos de Fútbol</title>
-  <link rel="stylesheet" href="../css/styles.css">
-  <link rel="stylesheet" href="../css/jugador.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FootPlayer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #008f39;
+        }
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+        .nav-link:hover {
+            color: #d4edda !important;
+        }
+        .profile-header {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+        .card {
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #008f39;
+            color: white;
+            font-weight: bold;
+            border-radius: 10px 10px 0 0;
+        }
+        .form-label {
+            font-weight: bold;
+        }
+        .form-control, .form-select {
+            border-radius: 5px;
+        }
+        .btn-primary {
+            background-color: #008f39;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #01a743;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            border: none;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #008f39;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <nav class="sidebar">
-      <div class="logo">FootPlayer</div>
-      <ul>
-        <li class="active"><i class="fas fa-home"></i> <a href="dashboard_jugador.html">Inicio</a></li>
-        <li><i class="fas fa-user"></i> <a href="perfil.html">Mi Perfil</a></li>
-        <li><i class="fas fa-users"></i> <a href="equipo.html">Mi Equipo</a></li>
-        <li><i class="fas fa-trophy"></i> <a href="torneos.html">Torneos</a></li>
-        <li><i class="fas fa-chart-bar"></i> <a href="estadisticas.html">Estadísticas</a></li>
-        <li><i class="fas fa-trophy"></i><a href="crear_equipo.html">Crear Equipo</a></li>
-        <li><i class="fas fa-trophy"></i><a href="ver_equipo.html">Ver equipos</a></li>
-        <li><i class="fas fa-trophy"></i><a href="unirse_equipo.html">Unirse a equipo</a></li>
-        <li><i class="fas fa-cog"></i> <a href="#">Configuración</a></li>
-        <li><i class="fas fa-sign-out-alt"></i> <a href="../login.html">Cerrar Sesión</a></li>
-      </ul>
-      <div class="footer">© 2025 FootPlayer</div>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">FootPlayer</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="/front/dashboard_jugador/dashboard_jugador.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/front/dashboard_jugador/perfil.html">Mi Perfil</a></li>
+                    <li class="nav-item"><a class="nav-link" href="equipo.html">Mi Equipo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="torneos.html">Torneos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="estadisticas.html">Estadísticas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="crear_equipo.html">Crear Equipo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ver_equipo.html">Ver equipo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="unirse_equipo.html">Unirse a equipo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/front/login.html" id="logout">Cerrar Sesión</a></li>
+                </ul>
+            </div>
+        </div>
     </nav>
-    
-    <div class="main">
-      <header class="main-header">
-        <h1>Mi Perfil</h1>
-        <div class="user-menu">
-          <img src="https://via.placeholder.com/40" alt="Foto de perfil" id="player-avatar">
-          <div class="notifications">
-            <i class="fas fa-bell"></i>
-            <span class="badge">2</span>
-          </div>
+
+    <div class="container">
+        <div class="profile-header">
+            <img src="https://thispersondoesnotexist.com/" class="profile-pic" alt="Foto de perfil" id="profile-pic">
+            <div>
+                <!-- <button class="btn btn-primary btn-sm" onclick="document.getElementById('photo-input').click()">Cambiar foto</button> -->
+                <input type="file" id="photo-input" style="display: none;" accept="image/*">
+            </div>
+            <h2 id="user-name">Juan Pérez</h2>
+            <p id="user-position">Delantero</p>
+            <p id="user-team">Los Tigres</p>
         </div>
-      </header>
-      
-      <section class="content">
-        <div class="card">
-          <div class="profile-header">
-            <div class="profile-avatar">
-              <img src="https://via.placeholder.com/150" alt="Foto de perfil">
-              <button class="btn btn-secondary" id="change-avatar">Cambiar foto</button>
-            </div>
-            <div class="profile-info">
-              <h2 id="profile-name">Juan Pérez</h2>
-              <p class="profile-position"><i class="fas fa-tshirt"></i> Delantero</p>
-              <p class="profile-team"><i class="fas fa-users"></i> Los Tigres</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="card">
-          <h2><i class="fas fa-user-edit"></i> Editar Perfil</h2>
-          <form id="profile-form">
-            <div class="form-row">
-              <div class="form-group">
-                <label for="first-name">Nombre</label>
-                <input type="text" id="first-name" class="form-control" value="Juan">
-              </div>
-              <div class="form-group">
-                <label for="last-name">Apellido</label>
-                <input type="text" id="last-name" class="form-control" value="Pérez">
-              </div>
-            </div>
-            
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" id="email" class="form-control" value="juan.perez@example.com">
-            </div>
-            
-            <div class="form-group">
-              <label for="phone">Teléfono</label>
-              <input type="tel" id="phone" class="form-control" value="+57 1234567890">
-            </div>
-            
-            <div class="form-row">
-              <div class="form-group">
-                <label for="position">Posición</label>
-                <select id="position" class="form-control">
-                  <option value="portero">Portero</option>
-                  <option value="defensa">Defensa</option>
-                  <option value="medio">Mediocampista</option>
-                  <option value="delantero" selected>Delantero</option>
-                </select>
-              </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Editar Perfil</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="foto" class="form-label">Foto</label>
+                            <input type="url" class="form-control" id="foto" value="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" value="">
+                        </div>
               
-              <div class="form-group">
-                <label for="birthdate">Fecha de nacimiento</label>
-                <input type="date" id="birthdate" class="form-control" value="1990-05-15">
-              </div>
+                        <div class="mb-3">
+                            <label for="contacto" class="form-label">contacto</label>
+                            <input type="tel" class="form-control" id="contacto" value="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Contraseña (dejar en blanco para no cambiar)</label>
+                            <input type="password" class="form-control" id="password" value="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="edad" class="form-label">Edad</label>
+                            <input type="number" class="form-control" id="edad" value="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="fecha-nacimiento" class="form-label">Fecha de nacimiento</label>
+                            <input type="date" class="form-control" id="fecha-nacimiento" value="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="sexo-biologico" class="form-label">Sexo Biológico</label>
+                            <select class="form-select" id="sexo-biologico">
+                                <option value="Hombre">Hombre</option>
+                                <option value="Mujer">Mujer</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="posicion" class="form-label">Posición</label>
+                            <select class="form-select" id="posicion">
+                                <option value="Portero">Portero</option>
+                                <option value="Defensa">Defensa</option>
+                                <option value="Mediocampista">Mediocampista</option>
+                                <option value="Delantero">Delantero</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="biografia" class="form-label">Biografía</label>
+                            <textarea class="form-control" id="biografia" rows="3"></textarea>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-secondary" onclick="resetProfileForm()">Cancelar</button>
+                            <button class="btn btn-primary" onclick="updateProfile()">Guardar Cambios</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <div class="form-group">
-              <label for="bio">Biografía</label>
-              <textarea id="bio" class="form-control" rows="3">Jugador de fútbol con 10 años de experiencia en torneos locales.</textarea>
+
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Información Médica</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="tipo-sangre" class="form-label">Tipo de sangre</label>
+                            <select class="form-select" id="tipo-sangre">
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="eps" class="form-label">EPS</label>
+                            <input type="text" class="form-control" id="eps" value="">
+                        </div>
+                        <div class="mb-3">
+                            <label id="contacto-emergencia" for="contacto-emergencia" class="form-label">Contacto de emergencia</label>
+                            <input type="text" class="form-control" id="contacto-emergencia" value="">
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-secondary" onclick="resetMedicalForm()">Cancelar</button>
+                            <button class="btn btn-primary" onclick="updateMedicalInfo()">Guardar</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <div class="form-actions">
-              <button type="button" class="btn btn-secondary" id="cancel-edit">Cancelar</button>
-              <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-            </div>
-          </form>
         </div>
-        
-        <div class="card">
-          <h2><i class="fas fa-shield-alt"></i> Información Médica</h2>
-          <form id="medical-form">
-            <div class="form-row">
-              <div class="form-group">
-                <label for="blood-type">Tipo de sangre</label>
-                <select id="blood-type" class="form-control">
-                  <option value="A+">A+</option>
-                  <option value="A-">A-</option>
-                  <option value="B+">B+</option>
-                  <option value="B-">B-</option>
-                  <option value="AB+">AB+</option>
-                  <option value="AB-">AB-</option>
-                  <option value="O+">O+</option>
-                  <option value="O-">O-</option>
-                </select>
-              </div>
-              
-              <div class="form-group">
-                <label for="eps">EPS</label>
-                <input type="text" id="eps" class="form-control" value="Sanitas">
-              </div>
-            </div>
-            
-            <div class="form-group">
-              <label for="emergency-contact">Contacto de emergencia</label>
-              <input type="text" id="emergency-contact" class="form-control" value="María Pérez - +57 987654321">
-            </div>
-            
-            <div class="form-group">
-              <label for="allergies">Alergias</label>
-              <textarea id="allergies" class="form-control" rows="2">Ninguna conocida</textarea>
-            </div>
-            
-            <div class="form-actions">
-              <button type="button" class="btn btn-secondary">Cancelar</button>
-              <button type="submit" class="btn btn-primary">Guardar</button>
-            </div>
-          </form>
-        </div>
-      </section>
     </div>
-  </div>
-  
-  <script src="../js/auth.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Configurar formulario
-      const profileForm = document.getElementById('profile-form');
-      if (profileForm) {
-        profileForm.addEventListener('submit', function(e) {
-          e.preventDefault();
-          alert('Perfil actualizado exitosamente');
+
+    <!-- <footer>
+        <p>© 2025 FootPlayer</p>
+    </footer> -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const userId = localStorage.getItem('userId') || 'defaultUserId';
+
+        async function fetchUserData() {
+            if (!userId || userId === 'defaultUserId') {
+                console.error('Invalid userId:', userId);
+                alert('Error: No se encontró un ID de usuario válido. Por favor, inicie sesión nuevamente.');
+                localStorage.removeItem('userId');
+                window.location.href = '/front/login.html';
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:3003/usuarios/${userId}`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        console.error('Usuario no encontrado en la base de datos:', userId);
+                        alert('Error: Usuario no encontrado. Por favor, inicie sesión nuevamente.');
+                        localStorage.removeItem('userId');
+                        window.location.href = '/front/login.html';
+                        return;
+                    }
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const user = await response.json();
+                if (!user || !user.contacto) {
+                    throw new Error('Datos de usuario no encontrados o inválidos');
+                }
+                populateUserData(user);
+            } catch (error) {
+                console.error('Error al cargar los datos:', error);
+                alert('Error al cargar los datos del usuario: ' + error.message);
+            }
+        }
+
+        function populateUserData(user) {
+            document.getElementById('user-name').textContent = user.nombre || 'Nombre no disponible';
+            document.getElementById('user-position').textContent = user.posicion || 'Posición no disponible';
+            document.getElementById('user-team').textContent = user.equipo || 'Equipo no disponible';
+            if (user.foto) {
+                document.getElementById('profile-pic').src = user.foto;
+            }
+
+            document.getElementById('nombre').value = user.nombre || '';
+            document.getElementById('contacto').value = user.contacto || '';
+            document.getElementById('password').value = ''; // Password field should be empty by default
+            document.getElementById('edad').value = user.edad || ''; // Password field should be empty by default
+            document.getElementById('posicion').value = user.posicion || '';
+            document.getElementById('biografia').value = user.descripcion || '';
+            document.getElementById('tipo-sangre').value = user.tipo_sangre || '';
+            document.getElementById('eps').value = user.eps || '';
+            document.getElementById('contacto-emergencia').value = user.contacto_emergencia || '';
+            document.getElementById('fecha-nacimiento').value = user.fecha_nacimiento || '';
+            document.getElementById('sexo-biologico').value = user.sexo_biologico || '';
+            document.getElementById('foto').value = user.foto || '';
+            
+            
+        }
+
+        async function resetProfileForm() {
+            await fetchUserData();
+        }
+
+        async function resetMedicalForm() {
+            await fetchUserData();
+        }
+
+        async function updateProfile() {
+            const password = document.getElementById('password').value;
+            const updatedData = {
+                nombre: document.getElementById('nombre').value,
+                contacto: document.getElementById('contacto').value,
+                posicion: document.getElementById('posicion').value,
+                edad: document.getElementById('edad').value,
+                descripcion: document.getElementById('biografia').value,
+                fecha_nacimiento: document.getElementById('fecha-nacimiento').value,
+                sexo_biologico: document.getElementById('sexo-biologico').value,
+                foto: document.getElementById('foto').value,
+            };
+            if (password) {
+                updatedData.password = password;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:3003/usuarios/${userId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                alert('Perfil actualizado con éxito');
+                await fetchUserData();
+            } catch (error) {
+                console.error('Error al actualizar el perfil:', error);
+                alert('Error al actualizar el perfil: ' + error.message);
+            }
+        }
+
+        async function updateMedicalInfo() {
+            const updatedData = {
+                tipo_sangre: document.getElementById('tipo-sangre').value,
+                eps: document.getElementById('eps').value,
+                contacto_emergencia: document.getElementById('contacto-emergencia').value,
+                
+            };
+
+            try {
+                const response = await fetch(`http://localhost:3003/usuarios/${userId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                alert('Información médica actualizada con éxito');
+                await fetchUserData();
+            } catch (error) {
+                console.error('Error al actualizar la información médica:', error);
+                alert('Error al actualizar la información médica: ' + error.message);
+            }
+        }
+
+        document.getElementById('photo-input').addEventListener('change', async (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    const photoData = e.target.result;
+                    try {
+                        const response = await fetch(`http://localhost:3003/usuarios/${userId}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ foto: photoData })
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+
+                        document.getElementById('profile-pic').src = photoData;
+                        alert('Foto actualizada con éxito');
+                    } catch (error) {
+                        console.error('Error al subir la foto:', error);
+                        alert('Error al subir la foto: ' + error.message);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
         });
-      }
-      
-      // Configurar botón cancelar
-      const cancelEditBtn = document.getElementById('cancel-edit');
-      if (cancelEditBtn) {
-        cancelEditBtn.addEventListener('click', function() {
-          if (confirm('¿Deseas descartar los cambios?')) {
-            // Resetear formulario
-            profileForm.reset();
-          }
+
+        document.getElementById('logout').addEventListener('click', () => {
+            localStorage.removeItem('userId');
+            window.location.href = '/front/login.html';
         });
-      }
-      
-      // Configurar cambio de avatar
-      const changeAvatarBtn = document.getElementById('change-avatar');
-      if (changeAvatarBtn) {
-        changeAvatarBtn.addEventListener('click', function() {
-          alert('Funcionalidad para cambiar foto de perfil');
-        });
-      }
-    });
-  </script>
+
+        window.onload = fetchUserData;
+    </script>
 </body>
 </html>

@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import axios from 'axios';
 import {
   crearPartido,
   consultarPartidoPorId,
@@ -11,7 +12,7 @@ import {
 const router = Router();
 
 // Crear un partido
-router.post('/Partidos', async (req, res) => {
+router.post('/partidos', async (req, res) => {
   const partido = req.body;
   try {
     await crearPartido(partido);
@@ -23,7 +24,7 @@ router.post('/Partidos', async (req, res) => {
 });
 
 // Obtener partido por ID
-router.get('/Partidos/:id', async (req, res) => {
+router.get('/partidos/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const partido = await consultarPartidoPorId(id);
@@ -39,7 +40,7 @@ router.get('/Partidos/:id', async (req, res) => {
 });
 
 // Obtener todos los partidos
-router.get('/Partidos', async (req, res) => {
+router.get('/partidos', async (req, res) => {
   try {
     const partidos = await consultarPartidos();
     res.json(partidos);
@@ -50,7 +51,7 @@ router.get('/Partidos', async (req, res) => {
 });
 
 // Actualizar resultado
-router.put('/Partidos/:id/resultado', async (req, res) => {
+router.put('/partidos/:id/resultado', async (req, res) => {
   const { id } = req.params;
   const { goles_local, goles_visitante, resultado } = req.body;
 
@@ -64,7 +65,7 @@ router.put('/Partidos/:id/resultado', async (req, res) => {
 });
 
 // Actualizar estado
-router.put('/Partidos/:id/estado', async (req, res) => {
+router.put('/partidos/:id/estado', async (req, res) => {
   const { id } = req.params;
   const { estado } = req.body;
 
@@ -77,30 +78,21 @@ router.put('/Partidos/:id/estado', async (req, res) => {
   }
 });
 
-// Obtener partidos por torneo
-router.get('/Partidos/torneos/:id', async (req, res) => {
-  const idTorneo = req.params.id;
-  const authHeader = req.headers.authorization;
+// Ruta para obtener partidos por torneo con token en headers
 
+
+router.get('/partidos/torneos/:id/equipos', async (req, res) => {
   try {
-    const response = await axios.get(`http://localhost:3002/torneos/${idTorneo}`, {
-      headers: {
-        Authorization: authHeader, // 👈 Reenvías el token
-      },
-    });
-    const torneoInfo = response.data;
-
-    const partidos = await Partido.find({ idTorneo });
-    const partidosConInfo = partidos.map((partido) => ({
-      ...partido.toObject(),
-      torneo: torneoInfo,
-    }));
-
-    res.json(partidosConInfo);
+    const equipos = await consultarPartidosPorTorneo(req.params.id);
+    res.json(equipos);
   } catch (error) {
-    console.error('Error al obtener torneo o partidos:', error.response?.data || error.message);
-    res.status(500).json({ error: 'Error al obtener torneo o partidos' });
+    console.error(error.message);
+    res.status(500).send("Error al consultar equipos inscritos desde el microservicio de torneos");
   }
 });
+
+
+
+
 
 export default router;

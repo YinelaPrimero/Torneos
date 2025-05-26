@@ -12,8 +12,8 @@ import {
 // Crear Torneo
 async function crearTorneo(data) {
   try {
+    // Primero lo creamos sin el campo id
     const docRef = await addDoc(collection(db, "torneos"), {
-      id: data.id,
       nombre: data.nombre,
       descripcion: data.descripcion,
       edad_minima: data.edad_minima,
@@ -25,11 +25,17 @@ async function crearTorneo(data) {
       equipos_inscritos: [],
       clasificación: []
     });
+
+    // Luego lo actualizamos con su propio ID
+    await updateDoc(docRef, { id: docRef.id });
+
     console.log("El torneo fue creado con ID: ", docRef.id);
+    return docRef.id;
   } catch (e) {
     console.error("Error al crear el torneo", e);
+    throw e;
   }
-}
+} 
 
 // Consultar todos los torneos
 async function consultarTorneos() {

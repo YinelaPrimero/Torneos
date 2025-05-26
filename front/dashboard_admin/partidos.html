@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Partidos - Admin</title>
-  <link rel="stylesheet" href="../css/styles.css">
-  <link rel="stylesheet" href="../css/admin.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/admin.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+  />
 </head>
 <body>
   <div class="container">
@@ -22,15 +25,15 @@
       </ul>
       <div class="footer">© 2025 FootAdmin</div>
     </nav>
-    
+
     <div class="main">
       <header class="main-header">
         <h1>Gestión de Partidos</h1>
-        <button class="btn btn-primary" id="add-match-btn">
+        <label for="toggle-modal" class="btn btn-primary" style="cursor:pointer;">
           <i class="fas fa-plus"></i> Crear Partido
-        </button>
+        </label>
       </header>
-      
+
       <section class="content">
         <div class="card">
           <div class="card-header">
@@ -38,16 +41,17 @@
             <div class="filters">
               <select id="filter-tournament" class="form-control">
                 <option value="">Todos los torneos</option>
-                <option value="1">Torneo de Verano</option>
+                <option value="Torneo de Verano">Torneo de Verano</option>
               </select>
               <select id="filter-status" class="form-control">
                 <option value="">Todos los estados</option>
-                <option value="programado">Programado</option>
-                <option value="jugando">En juego</option>
+                <option value="Programado">Programado</option>
+                <option value="Jugando">En juego</option>
+                <option value="Finalizado">Finalizado</option>
               </select>
             </div>
           </div>
-          
+
           <table class="table">
             <thead>
               <tr>
@@ -60,71 +64,106 @@
                 <th>Acciones</th>
               </tr>
             </thead>
-            <tbody id="matches-list">
-              <!-- Ejemplo de datos -->
-              <tr>
-                <td>Torneo de Verano</td>
-                <td>Los Tigres</td>
-                <td>Águilas FC</td>
-                <td>20/06/2025 18:00</td>
-                <td>-</td>
-                <td><span class="badge badge-info">Programado</span></td>
-                <td>
-                  <button class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
-                  <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                </td>
-              </tr>
-            </tbody>
+            <tbody id="matches-list"></tbody>
           </table>
         </div>
       </section>
     </div>
   </div>
 
-  <!-- Modal para crear/editar partido -->
-  <div class="modal" id="match-modal">
-    <div class="modal-content">
-      <h3>Crear Partido</h3>
-      <form id="match-form">
-        <div class="form-group">
-          <label>Torneo</label>
-          <select class="form-control" required>
-            <option value="">Seleccionar torneo</option>
-            <option value="1">Torneo de Verano</option>
+  
+  <!-- Modal para crear partido -->
+<input type="checkbox" id="toggle-modal" class="modal-toggle" hidden />
+<div class="modal" id="match-modal">
+  <div class="modal-content">
+    <h3>Crear Partido</h3>
+    <form id="match-form">
+      <div class="form-group">
+        <label for="tournament-select">Torneo</label>
+        <select id="tournament-select" class="form-control" required>
+          <option value="">Selecciona un torneo</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group" style="flex: 1; margin-right: 10px;">
+          <label>Equipo Local</label>
+          <select id="local-team-select" class="form-control" required>
+            <option value="">Selecciona equipo local</option>
           </select>
         </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Equipo Local</label>
-            <select class="form-control" required>
-              <option value="">Seleccionar equipo</option>
-              <option value="1">Los Tigres</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Equipo Visitante</label>
-            <select class="form-control" required>
-              <option value="">Seleccionar equipo</option>
-              <option value="2">Águilas FC</option>
-            </select>
-          </div>
+        <div class="form-group" style="flex: 1;">
+          <label>Equipo Visitante</label>
+          <select id="visitor-team-select" class="form-control" required>
+            <option value="">Selecciona equipo visitante</option>
+          </select>
         </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Fecha</label>
-            <input type="date" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label>Hora</label>
-            <input type="time" class="form-control" required>
-          </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group" style="flex: 1; margin-right: 10px;">
+          <label>Fecha</label>
+          <input type="date" id="date-input" class="form-control" required />
         </div>
-        <div class="form-actions">
-          <button type="button" class="btn btn-secondary" id="cancel-match">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Guardar</button>
+        <div class="form-group" style="flex: 1;">
+          <label>Hora</label>
+          <input type="time" id="time-input" class="form-control" required />
         </div>
-      </form>
-    </div>
+      </div>
+
+      <div class="form-actions">
+        <label for="toggle-modal" class="btn btn-secondary" style="cursor:pointer;">
+          Cancelar
+        </label>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </div>
+    </form>
   </div>
+</div>
+
+
+  <!-- Modal editar resultado -->
+  <div class="modal" id="edit-result-modal" style="display: none;">
+  <div class="modal-content">
+    <h3>Editar Resultado</h3>
+    <form id="edit-result-form">
+      <input type="hidden" id="edit-id" />
+      <div class="form-row">
+        <div class="form-group">
+          <label>Goles Local</label>
+          <input type="number" id="edit-goles-local" class="form-control" required />
+        </div>
+        <div class="form-group">
+          <label>Goles Visitante</label>
+          <input type="number" id="edit-goles-visitante" class="form-control" required />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Estado</label>
+          <select id="edit-estado" class="form-control" required>
+            <option value="Programado">Programado</option>
+            <option value="En juego">En juego</option>
+            <option value="Aplazado">Aplazado</option>
+            <option value="Suspendido">Suspendido</option>
+            <option value="Finalizado">Finalizado</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" id="cancel-edit">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary">Actualizar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <!-- Tu script JS -->
+  <script src="../js/partidos.js"></script>
 </body>
 </html>
