@@ -1,5 +1,5 @@
 import { Router } from 'express';  
-import { crearEquipo, consultarEquipos, consultarEquipo, actualizarEquipo, eliminarEquipo, agregarJugador, eliminarJugador, consultarJugadores, obtenerEdadesJugadores } from '../models/equiposModel.js'; 
+import { obtenerEquipoPorUsuario, crearEquipo, consultarEquipos, consultarEquipo, actualizarEquipo, eliminarEquipo, agregarJugador, eliminarJugador, consultarJugadores, obtenerEdadesJugadores } from '../models/equiposModel.js'; 
 
 const router = Router(); 
 
@@ -115,6 +115,22 @@ router.get('/equipos/:id/edades-jugadores', async (req, res) => {
     res.json({ edades });
   } catch (error) {
     res.status(500).send("Error al obtener las edades");
+  }
+});
+
+router.get('/equipos/usuario/:idUsuario', async (req, res) => {
+  const { idUsuario } = req.params;
+
+  try {
+    const equipo = await obtenerEquipoPorUsuario(idUsuario);
+
+    if (!equipo) {
+      return res.status(404).send("Usuario no pertenece a ningún equipo");
+    }
+
+    res.json(equipo);
+  } catch (error) {
+    res.status(500).send("Error al obtener el equipo del usuario");
   }
 });
 
