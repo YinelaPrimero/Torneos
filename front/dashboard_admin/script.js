@@ -1,10 +1,10 @@
 // URL de tu API (ajustar si tu microservicio está en otro puerto o dominio)
-const apiUrl = "http://localhost:3001/equipos"; // Ajusta el endpoint
+const apiUrl = "http://192.168.100.2:3001/equipos"; // Ajusta el endpoint
 
 // Función para obtener el nombre del capitán dado su ID
 async function obtenerNombreCapitan(idCapitan) {
   try {
-    const response = await fetch(`http://localhost:3003/usuarios/${idCapitan}`);
+    const response = await fetch(`http://192.168.100.2:3003/usuarios/${idCapitan}`);
     if (!response.ok) throw new Error('Error al obtener usuario');
     const usuario = await response.json();
     return usuario.nombre || "Nombre no disponible";

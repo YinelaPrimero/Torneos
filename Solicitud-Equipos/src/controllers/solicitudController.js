@@ -28,13 +28,13 @@ router.post('/solicitudes', async (req, res) => {
 
   try {
     // Validar que el usuario (jugador) exista
-    const usuarioResponse = await axios.get(`http://localhost:3003/usuarios/${id_jugador}`);
+    const usuarioResponse = await axios.get(`http://192.168.100.2:3003/usuarios/${id_jugador}`);
     if (!usuarioResponse.data) {
       return res.status(404).send("Usuario no encontrado");
     }
 
     // Validar que el equipo exista
-    const equipoResponse = await axios.get(`http://localhost:3001/equipos/${id_equipo}`);
+    const equipoResponse = await axios.get(`http://192.168.100.2:3001/equipos/${id_equipo}`);
     if (!equipoResponse.data) {
       return res.status(404).send("Equipo no encontrado");
     }
@@ -69,7 +69,7 @@ router.get('/solicitudes/equipo/:id_equipo', async (req, res) => {
   const { id_equipo } = req.params;
   try {
     // Validar que el equipo exista
-    const equipoResponse = await axios.get(`http://localhost:3001/equipos/${id_equipo}`);
+    const equipoResponse = await axios.get(`http://192.168.100.2:3001/equipos/${id_equipo}`);
     if (!equipoResponse.data) {
       return res.status(404).send("Equipo no encontrado");
     }

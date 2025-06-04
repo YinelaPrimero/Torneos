@@ -19,7 +19,7 @@ export const db = getFirestore(firebaseApp);
 
 // Agrega CORS aquí, justo después de crear app y antes de rutas y otros middlewares
 app.use(cors({
-  origin: ['http://127.0.0.1:5500', 'http://localhost:5500'], // Orígenes permitidos
+  origin: ['http://127.0.0.1:5500', 'http://192.168.100.2:5500'], // Orígenes permitidos
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));

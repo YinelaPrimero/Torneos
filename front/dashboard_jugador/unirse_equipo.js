@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const jugadorId = userId;
 
   try {
-    const response = await fetch('http://localhost:3001/equipos');
+    const response = await fetch('http://192.168.100.2:3001/equipos');
     if (!response.ok) throw new Error('Error al obtener equipos');
     const equipos = await response.json();
 
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const equiposConCapitan = await Promise.all(
       equipos.map(async (team) => {
         try {
-          const resUser = await fetch(`http://localhost:3003/usuarios/${team.capitan}`);
+          const resUser = await fetch(`http://192.168.100.2:3003/usuarios/${team.capitan}`);
           if (!resUser.ok) throw new Error('Error al obtener capitán');
           const userData = await resUser.json();
           return { ...team, capitanNombre: userData.nombre || 'Sin nombre' };
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Función para enviar solicitud al backend
     async function enviarSolicitud(equipoId) {
       try {
-        const res = await fetch('http://localhost:3004/solicitudes', { 
+        const res = await fetch('http://192.168.100.2:3004/solicitudes', { 
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 

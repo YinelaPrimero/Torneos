@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Cargar torneos desde backend
   function loadTournaments() {
-    fetch('http://localhost:3002/torneos', {
+    fetch('http://192.168.100.2:3002/torneos', {
       headers: { Authorization: UserId }
     })
     .then(res => {
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
       estado: 'activo'
     };
 
-    const url = id ? `http://localhost:3002/torneos/${id}` : 'http://localhost:3002/torneos';
+    const url = id ? `http://192.168.100.2:3002/torneos/${id}` : 'http://192.168.100.2:3002/torneos';
     const method = id ? 'PUT' : 'POST';
 
     fetch(url, {

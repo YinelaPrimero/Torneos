@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let equipos = [];
 
   // Cargar equipos al inicio
-  fetch("http://localhost:3001/equipos")
+  fetch("http://192.168.100.2:3001/equipos")
     .then(async res => {
       if (!res.ok) {
         const errorText = await res.text();
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById('show-all-matches').addEventListener('click', async () => {
     try {
-      const response = await fetch('http://localhost:3005/partidos');
+      const response = await fetch('http://192.168.100.2:3005/partidos');
       if (!response.ok) {
         throw new Error('Error al consultar partidos');
       }
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:3005/partidos/${partidoId}`);
+      const response = await fetch(`http://192.168.100.2:3005/partidos/${partidoId}`);
       if (response.status === 404) {
         alert('Partido no encontrado.');
         return;

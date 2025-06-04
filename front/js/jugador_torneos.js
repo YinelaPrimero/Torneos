@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Cargar torneos desde el backend
   function loadTournaments() {
-    fetch('http://localhost:3002/torneos', {
+    fetch('http://192.168.100.2:3002/torneos', {
       headers: { Authorization: userId },
     })
       .then((res) => {
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     try {
       // Suponemos que el backend tiene un endpoint para obtener el equipo del jugador
-      const equipoResponse = await fetch('http://localhost:3001/equipos/jugador/' + userId, {
+      const equipoResponse = await fetch('http://192.168.100.2:3001/equipos/jugador/' + userId, {
         headers: { Authorization: userId },
       });
       if (!equipoResponse.ok) throw new Error('Error al cargar equipo del jugador');
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const torneosInscritos = await Promise.all(
         tournaments.map(async (tournament) => {
-          const equipos = await fetch(`http://localhost:3002/torneos/${tournament.id}/equipos`, {
+          const equipos = await fetch(`http://192.168.100.2:3002/torneos/${tournament.id}/equipos`, {
             headers: { Authorization: userId },
           }).then((res) => res.json());
           const isInscrito = equipos.some((e) => e._id === equipo._id);
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Inscribir equipo en un torneo
   function inscribirEquipo(tournamentId) {
-    fetch('http://localhost:3001/equipos/jugador/' + userId, {
+    fetch('http://192.168.100.2:3001/equipos/jugador/' + userId, {
       headers: { Authorization: userId },
     })
       .then((res) => {
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function () {
           alert('No estás en ningún equipo. Únete o crea uno primero.');
           return;
         }
-        return fetch(`http://localhost:3002/torneos/${tournamentId}/equipos`, {
+        return fetch(`http://192.168.100.2:3002/torneos/${tournamentId}/equipos`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

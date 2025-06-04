@@ -7,7 +7,7 @@ export async function verificarAdmin(req, res, next) {
       return res.status(401).json({ message: 'No autorizado: falta userId' });
     }
 
-    const { data: usuarios } = await axios.get('http://localhost:3003/usuarios');
+    const { data: usuarios } = await axios.get('http://192.168.100.2:3003/usuarios');
     const usuario = usuarios.find(u => u.id === userId);
 
     if (!usuario) {

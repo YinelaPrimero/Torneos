@@ -87,7 +87,7 @@ router.post('/torneos/:id/equipos', async (req, res) => {
       return res.status(500).send("Edad mínima inválida en el torneo");
     }
 
-    const response = await axios.get(`http://localhost:3001/equipos/${equipoId}/edades-jugadores`);
+    const response = await axios.get(`http://192.168.100.2:3001/equipos/${equipoId}/edades-jugadores`);
 
     const edades = response.data.edades;
     if (!edades || edades.length === 0) {
@@ -122,7 +122,7 @@ router.get('/torneos/:id/equipos', async (req, res) => {
 
     const equiposCompletos = await Promise.all(
       equiposIds.map(async (equipoId) => {
-        const response = await axios.get(`http://localhost:3001/equipos/${equipoId}`);
+        const response = await axios.get(`http://192.168.100.2:3001/equipos/${equipoId}`);
         return { ...response.data, _id: equipoId }; // <-- aquí tendrás nombre!!!
       })
     );

@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM listo");
 
   // Cargar torneos al inicio
-  fetch("http://localhost:3002/torneos")
+  fetch("http://192.168.100.2:3002/torneos")
     .then(async res => {
       if (!res.ok) {
         const errorText = await res.text();
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     visitorTeamSelect.innerHTML = '<option value="">Selecciona equipo visitante</option>';
 
     try {
-      const res = await fetch(`http://localhost:3002/torneos/${torneoId}/equipos`);
+      const res = await fetch(`http://192.168.100.2:3002/torneos/${torneoId}/equipos`);
       if (!res.ok) {
         const errorText = await res.text();
         throw new Error(errorText || "Error al consultar los equipos inscritos.");
@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
       torneoId: torneoId
     };
     try {
-      const res = await fetch("http://localhost:3005/partidos", {
+      const res = await fetch("http://192.168.100.2:3005/partidos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(partido)
@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Función para cargar la tabla con los partidos
   async function cargarPartidos() {
     try {
-      const res = await fetch("http://localhost:3005/partidos");
+      const res = await fetch("http://192.168.100.2:3005/partidos");
       if (!res.ok) {
         const errorText = await res.text();
         throw new Error(errorText || "Error al consultar partidos.");
@@ -180,7 +180,7 @@ document.getElementById("edit-result-form").onsubmit = async function(e) {
   const resultado = `${golesLocal} - ${golesVisitante}`;
 
     try {
-    let res1 = await fetch(`http://localhost:3005/partidos/${partidoId}/resultado`, {
+    let res1 = await fetch(`http://192.168.100.2:3005/partidos/${partidoId}/resultado`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -192,7 +192,7 @@ document.getElementById("edit-result-form").onsubmit = async function(e) {
     if (!res1.ok) throw new Error("Error actualizando goles");
       console.log(`Resultado del partido ${partidoId} actualizado en el microservicio`);
 
-      let res2 = await fetch(`http://localhost:3005/partidos/${partidoId}/estado`, {
+      let res2 = await fetch(`http://192.168.100.2:3005/partidos/${partidoId}/estado`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ estado })

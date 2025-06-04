@@ -219,7 +219,7 @@
             }
 
             try {
-                const response = await fetch(`http://localhost:3003/usuarios/${userId}`, {
+                const response = await fetch(`http://192.168.100.2:3003/usuarios/${userId}`, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' }
                 });
@@ -295,7 +295,7 @@
             }
 
             try {
-                const response = await fetch(`http://localhost:3003/usuarios/${userId}`, {
+                const response = await fetch(`http://192.168.100.2:3003/usuarios/${userId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(updatedData)
@@ -322,7 +322,7 @@
             };
 
             try {
-                const response = await fetch(`http://localhost:3003/usuarios/${userId}`, {
+                const response = await fetch(`http://192.168.100.2:3003/usuarios/${userId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(updatedData)
@@ -347,7 +347,7 @@
                 reader.onload = async (e) => {
                     const photoData = e.target.result;
                     try {
-                        const response = await fetch(`http://localhost:3003/usuarios/${userId}`, {
+                        const response = await fetch(`http://192.168.100.2:3003/usuarios/${userId}`, {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ foto: photoData })

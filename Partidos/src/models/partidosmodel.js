@@ -86,7 +86,7 @@ async function actualizarEstadoPartido(idBuscado, estado) {
 
 async function consultarPartidosPorTorneo(idTorneo) {
   try {
-    const response = await axios.get(`http://localhost:3002/torneos/${idTorneo}/equipos`);
+    const response = await axios.get(`http://192.168.100.2:3002/torneos/${idTorneo}/equipos`);
     return response.data;
   } catch (error) {
     console.error('Error al obtener equipos inscritos:', error.message);

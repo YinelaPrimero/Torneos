@@ -3,6 +3,41 @@ document.addEventListener('DOMContentLoaded', async () => {
   const userId = localStorage.getItem("userId");
   const idUsuario = userId;
 
+<<<<<<< Updated upstream
+=======
+  async function obtenerEquipoPorUsuario(idUsuario) {
+    try {
+      const response = await fetch(`http://192.168.100.2:3001/equipos/usuario/${idUsuario}`);
+
+      if (!response.ok) {
+        throw new Error("Error al consultar equipo");
+      }
+
+      const equipo = await response.json();
+
+      if (equipo && equipo.id) {
+        console.log("Equipo al que pertenece el usuario:", equipo.id);
+        return equipo.id; // Retorna el id del equipo
+      } else {
+        console.log("El usuario no pertenece a ningún equipo.");
+        return null;
+      }
+
+    } catch (error) {
+      console.error("Error obteniendo el equipo del usuario:", error);
+      return null;
+    }
+  }
+
+  // Esperas el resultado aquí
+  const equipoId = await obtenerEquipoPorUsuario(userId);
+  console.log("equipoId disponible para usar:", equipoId);
+
+  if (equipoId) {
+    // Aquí puedes seguir con la lógica que dependa de equipoId
+  }
+
+>>>>>>> Stashed changes
   // Elementos DOM
   const modal = document.getElementById('edit-team-modal');
   const btnEditar = document.getElementById('edit-team');
@@ -14,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function abrirModalEdicion() {
     try {
-      const res = await fetch(`http://localhost:3001/equipos/${equipoId}`);
+      const res = await fetch(`http://192.168.100.2:3001/equipos/${equipoId}`);
       if (!res.ok) throw new Error('Error al obtener equipo para edición');
       const equipo = await res.json();
 
@@ -43,7 +78,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const dataActualizar = { nombre, logo, descripcion, idUsuario };
 
     try {
-      const res = await fetch(`http://localhost:3001/equipos/${equipoId}`, {
+      const res = await fetch(`http://192.168.100.2:3001/equipos/${equipoId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dataActualizar)
@@ -72,7 +107,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!confirm('¿Estás seguro que quieres eliminar este equipo? Esta acción no se puede deshacer.')) return;
 
     try {
-      const res = await fetch(`http://localhost:3001/equipos/${equipoId}`, {
+      const res = await fetch(`http://192.168.100.2:3001/equipos/${equipoId}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ idUsuario }),
@@ -92,7 +127,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function cargarSolicitudesPendientes(id_equipo) {
     try {
-      const resSolicitudes = await fetch(`http://localhost:3004/solicitudes/equipo/${id_equipo}`);
+      const resSolicitudes = await fetch(`http://192.168.100.2:3004/solicitudes/equipo/${id_equipo}`);
       if (!resSolicitudes.ok) throw new Error('Error al obtener solicitudes');
       const solicitudes = await resSolicitudes.json();
 
@@ -104,7 +139,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const solicitudesConDatos = await Promise.all(
         solicitudes.map(async (solicitud) => {
           try {
-            const resUser = await fetch(`http://localhost:3003/usuarios/${solicitud.id_jugador}`);
+            const resUser = await fetch(`http://192.168.100.2:3003/usuarios/${solicitud.id_jugador}`);
             if (!resUser.ok) throw new Error('Error al obtener usuario');
             const userData = await resUser.json();
             return {
@@ -143,7 +178,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
           try {
             // 1. Actualizar estado solicitud a aceptada
-            const res = await fetch(`http://localhost:3004/solicitudes/${idSolicitud}`, {
+            const res = await fetch(`http://192.168.100.2:3004/solicitudes/${idSolicitud}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ estado: 'aceptada' }),
@@ -151,7 +186,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (!res.ok) throw new Error('Error al aceptar solicitud');
 
             // 2. Agregar jugador al equipo
-            const resAddPlayer = await fetch(`http://localhost:3001/equipos/${equipoId}/jugadores`, {
+            const resAddPlayer = await fetch(`http://192.168.100.2:3001/equipos/${equipoId}/jugadores`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ idJugador, idUsuario }),
@@ -172,7 +207,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           if (!confirm('¿Rechazar esta solicitud?')) return;
 
           try {
-            const res = await fetch(`http://localhost:3001/solicitudes/${idSolicitud}`, {
+            const res = await fetch(`http://192.168.100.2:3001/solicitudes/${idSolicitud}`, {
               method: 'PUT',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ estado: 'rechazada' }),
@@ -192,14 +227,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   try {
-    const equipoRes = await fetch(`http://localhost:3001/equipos/${equipoId}`);
+    const equipoRes = await fetch(`http://192.168.100.2:3001/equipos/${equipoId}`);
     if (!equipoRes.ok) throw new Error('Error al obtener datos del equipo');
     const equipo = await equipoRes.json();
 
     let nombreCapitan = 'Desconocido';
     if (equipo.capitan) {
       try {
-        const capitanRes = await fetch(`http://localhost:3003/usuarios/${equipo.capitan}`);
+        const capitanRes = await fetch(`http://192.168.100.2:3003/usuarios/${equipo.capitan}`);
         if (capitanRes.ok) {
           const capitanData = await capitanRes.json();
           nombreCapitan = capitanData.nombre || 'Desconocido';
@@ -216,7 +251,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const jugadoresDetalles = await Promise.all(
       (equipo.jugadores || []).map(async (jugadorId) => {
         try {
-          const res = await fetch(`http://localhost:3003/usuarios/${jugadorId}`);
+          const res = await fetch(`http://192.168.100.2:3003/usuarios/${jugadorId}`);
           if (!res.ok) throw new Error('Error al obtener jugador');
           const data = await res.json();
           return {

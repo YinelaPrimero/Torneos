@@ -194,7 +194,7 @@ async function obtenerEdadesJugadores(idEquipo) {
     const edades = [];
 
     for (const jugadorId of jugadores) {
-      const response = await axios.get(`http://localhost:3003/usuarios/${jugadorId}`);
+      const response = await axios.get(`http://192.168.100.2:3003/usuarios/${jugadorId}`);
       const edad = response.data.edad;
       edades.push(edad);
     }
